@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>instance</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- ex1 -->
+    <div id="app">
+        <!-- 1.템플릿 문법 : {{ }} -> render() 함수(출력함수, 아주간단간단한 아이들 출력) -->
+        {{'결과 :' + result}}
+    </div>
+    <script>
+        /*
+    속성 : 주요 5가지
+        new Vue({
+            el : 'HTML 요소(마운트될 html요소)',
+            data : {
+                //데이터에 대한 모든 정보
+            },
+            computed : {
+                //data 속성에 정의된 정보를 연산한 정보
+            },
+            methods : {
+                //데이터를 처리, 메소드
+            },
+            watch : {
+                //데이터를 감시 -> 변화를 감지(데이터가 변환 되면 감지)
+            }
+        });
+
+        예)computed - 데이터에 a,b값을 주면 실시간으로 결과값을 볼 수있는거.
+                    실시간 환율, 계산기에서 1+2하면 미리 3이 나와있는거 .. 등등
+
+    */
+
+        let vue1 = new Vue({
+            el: '#app',
+            data: {
+                a: 1,
+                b: 2,
+            },
+            computed: {
+                result: function () {
+                    return this.a + this.b
+                }
+            }
+        });
+    </script>
+
+
+    <!-- ex2 -->
+    <div id="app2">
+        <!-- div안에 있는 애들만 Vue가 관리 -->
+        <p>{{myText}}</p>
+        <p>{{'결과 :' + result}}</p>
+        <p>{{'-----------------------'}}</p>
+        <!--위의 div에 있는 값은 인식 못함 
+                                        => el영역이 달라서, 통신방법을 정해줘야함-->
+
+
+        <!-- 2. ☆디렉티브 : Vue가 해당 요소에 실행할 명령어 (v- )
+            => 태그를 제어하겠다!! 즉 데이터를 보낼 때 사용함 -->
+        <!--(v- ) : 접두어 -->
+        <p v-text="'한글 리터럴 상수값'"> </p>
+        <p v-text="6+7"> </p>
+        <!-- 변수, 연산결과가 들어감. 실제 값을 넣으려면 리터럴형태로 들어가야함-->
+
+        <!-- html 적용하기 -->
+        <p v-html="myText"></p>
+    </div>
+    <p>{{myText}}</p>
+    <hr>
+
+    <script>
+        // 속성접근 : $, 프로퍼티접근 : 생략가능
+        let app2 = new Vue({
+            el: '#app2',
+            data: {
+                // Vue가 제어하는 data : 프로퍼티(필드)
+                myText: '<h1>Hello!!!<h1>'
+            }
+        })
+    </script>
+
+
+
+    <!--ex3 : 실행안됨-->
+    <div id="app3">
+        <!--  <p>{{ 여기는 자바스크립트영역 }}</p> -->
+        <p>{{ myNumber *.12345 }}</p>
+        <p>{{ myText + '를 배워보도록 합시다.'}}</p>
+        <p>{{ myBoolean }}</p>
+        <p>{{ myArray }}</p>
+        <p>{{ myArray[0] }}</p>
+        <p>{{ myObject }}</p>
+        <p>{{ myObject.name }} {{ myObject.price }}</p>
+        <p>{{ $data }}</p>
+        <p>{{ new Date() }}</p>
+    </div>
+    <!-- <h1>func1()</h1> 이렇게 하면 안됨..  -->
+    
+    <script>
+        function func1() {
+            return '출력';
+        }
+        document.write(func1());
+
+        new Vue({
+            el: '#app3',
+            data: {
+                myNumber: 12345,
+                myText: 'Vue js',
+                myBoolean: true,
+                myArray: ['다즐링', '얼그레이', '실론'],
+                myObject: {
+                    name: '홍차',
+                    pirce: 600,
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

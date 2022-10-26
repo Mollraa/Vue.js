@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <style>
+    .blue-underline {
+      text-decoration-line: underline;
+      text-decoration-color: blue;
+    }
+
+    .dark {
+      background-color: black;
+
+    .strike-through {
+            text-decoration: line-through;
+            color: blue;
+        }
+
+        .dark {
+            background-color: black;
+        }
+   
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <p><a v-bind:href="myNaver">네이버로 연결</a></p>
+    <p><img :src="myImg" v-bind:style="sytyleObject">이미지 표시</img></p>
+    <p>텍스트를 왼쪽 정렬</p>
+    <p>텍스트를 오른쪽 정렬</p>
+    <p>텍스트를 가운데 정렬</p>
+    <p v-bind:style="jiniStyle">인라인 스타일로 글자색을 빨간색으로</p>
+    <p v-bind:style="jiniStyle">인라인 스타일로 글자크기를 150% 크게 빨간색으로</p>
+    <p v-bind:style="jiniStyle">인라인 스타일로 글자크기를 150% 크게 빨간색으로 배경은 노란색으로</p>
+    <p v-bind:class="myClass">blue-underline(파란색 밑줄) class 지정</p>
+    <p v-bind:class="[myClass ,darkClass]">blue-underline(파란색 밑줄), dark(배경은 검은색으로) class 지정</p>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data : {
+        myNaver : 'https:www.naver.com',
+        myImg : '4.jpg',
+        sytyleObject : {
+          width : '30%',
+          border : '2px solid pink'
+        },
+        jiniStyle : {
+          color : 'red'
+        },
+        myClass: 'strike-through',
+                darkClass: 'dark',
+      }
+    })
+  </script>
+</body>
+</html>

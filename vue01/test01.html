@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--vue CND-->
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- {{}} : 이중수염 ㅎ.ㅎ -->
+        {{ message }}<br>
+        <span v-bind:title="titleMsg">
+            내 위에 잠시 마우스를 올리면 동족으로 바인딩 된 title을 볼 수 있습니다.
+        </span>
+    </div>
+
+    <script>
+        const vue ={
+            data() {
+                return{
+                    message : '안녕하세요 Vue!!',
+                    titleMsg : '이 페이지는' + new Date() + '에 로드되었습니다.'
+                }
+            }
+        }
+
+        Vue.createApp(vue).mount('#app');
+        // Vue. = CDN하면 생성되는 객체, root와 같다. 뷰객체는 재사용 성이 높아서
+    </script>
+</body>
+
+</html>

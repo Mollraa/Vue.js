@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <style>
+        .strike-through {
+            text-decoration: line-through;
+            color: hotpink;
+        }
+
+        .dark {
+            background-color: gray;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- html에 넣지만 자바스크립트라는 걸 명심명심 하쟈 -->
+    <div id="app">
+
+        <!--ex1) -->
+        <!--v-bind : html 태그의 속성 값을 주는 것 -->
+        <!-- 변수 : "", 리터럴 : "''"-->
+        <img src="4.jpg" style="width: 20%;">직접지정</img>&nbsp&nbsp&nbsp&nbsp
+        <img :src="fileName" v-bind:style="sytyleObject">v-bind로 지정</img>&nbsp&nbsp&nbsp&nbsp
+        <!--v-bind : 바인딩 그 잡채../ 하도 많이 써서 속성앞에 :해주면 사용가능 -->
+        <img class="vueImg" v-bind:src="fileName" v-bind:style="sytyleObject">v-bind 디렉티브로 연결</img>
+        <!-- class~ 새로 뭘 만드는게 아님-->
+
+        <hr>
+        <br>
+
+        <!--ex2) -->
+        <a href="https:www.naver.com">링크를 직접 지정</a><br>
+        <a v-bind:href="myURL">링크를 v-bind로 지정</a>
+        <!-- 쉽게 생각해서 각 속성에 동적으로 값을 주겠다. -->
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                fileName: "4.jpg",
+                sytyleObject: {
+                    //sytyleObject : 여러개 값 넘길 때 
+                    //스타일은 오브젝트로 값을 넘겨줄 수 있다. 가 핵심!!!!
+                    width: '20%',
+                    border: '1px solid pink'
+                },
+                style: 'width : 20%',
+                myURL: 'https://www.google.co'
+            }
+        });
+    </script>
+
+
+    <!--ex 2-->
+    <div id="app2">
+        <!-- v-bind:style="프로퍼티명" -->
+        <!-- v-bind:style="{ color : 프로퍼티명, backgroundColor : 프로퍼티명 } " -->
+        <p style="color: salmon;">문자색 직접 지정</p>
+        <!-- 잘못 된 예시 : <p v-bind:style="color: mySize; border : myBorder">문자색 v-bind로 지정</p> -->
+        <p v-bind:style="{ color: myColor }">문자색 v-bind로 지정</p>
+        <hr>
+        <p style="font-size: 200%;">글자 크기 직접 지정</p>
+        <p v-bind:style="{ fontSize : mySize}">글자 크기를 v-bind로 지정</p>
+        <!-- => mybatis, .xml에서 하이폰이랑 대문자 해주는거.
+                뷰에선 기본 지정 하이폰 있는 부분 대문자로 연결 -->
+        <p style="background-color: pink;">배경색 직접 지정</p>
+        <p v-bind:style="{backgroundColor : myBackColor}">배경색 직접 지정</p>
+    </div>
+    <script>
+        new Vue({
+            el: '#app2',
+            data: {
+                myColor: 'blue',
+                mySize: '200%',
+                myBackColor: 'aqua'
+            }
+        });
+    </script>
+
+
+    <!-- 인라인 스타일 -->
+    <div id="exam">
+        <p style="color: lightcoral; border: 2px solid midnightblue;">테스트 입니다.</p>
+        <button type="button" id="cssBtn">변경</button>
+
+        <p v-bind:style="myStyle">v-bind 테스트 입니다.</p>
+        <button type="button" v-on:click="changeStyle">변경</button>
+    </div>
+    <script>
+        // function cssBtn(){
+        //     let c = document.getElementById.cssBtn();
+        //     if(c == onclick ){
+        //         style : 'pink'
+        //     }
+        // };
+
+        //교수님 버전
+        $('#cssBtn').click(function () {
+            $(this).prev().css({
+                color: 'blue',
+                border: '2px solid red'
+            })
+        });
+
+        new Vue({
+            el: '#exam',
+            data: {
+                myStyle: {
+                    color: 'yellow',
+                    border: '2px solid skyblue'
+                },
+                changeValue: {
+                    color: 'green',
+                    border: '2px solid red'
+                }
+            },
+            methods: {
+                changeStyle: function () {
+                    this.myStyle = this.changeValue;
+                }
+            }
+        });
+    </script>
+
+
+    <div id="app4">
+        <p class="strike-through">직접 클래스 지정</p>
+        <p v-bind:class="myClass">v-bind로 클래스 지정</p>
+        <p v-bind:class="[myClass, darkClass]">v-bind로 복수의 클래스 지정</p>
+        <p v-bind:class="{'strike-through' : isOn}">데이터로 클래스 ON/OFF </p>
+        <!-- input같은 애들은 바인드디렉티브못씀 -->
+    </div>
+    <script>
+        new Vue({
+            el: '#app4',
+            data: {
+                myClass: 'strike-through',
+                darkClass: 'dark',
+                isOn: false //true
+            }
+        });
+    </script>
+
+</body>
+
+</html>
