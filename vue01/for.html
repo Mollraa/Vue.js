@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>for</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- for : in뒤에 Array,objArray냐 중요, 이중 배열까지 다룰 줄 알아야함 -->
+    <!-- array는 프로퍼티만 생각하면 됨. 메소드 중요. -->
+    <div id="app">
+        <ul>
+            <h3>배열을 이용한 for 디렉티브</h3>
+            <li v-for="item in myArray" v-bind:class="item">{{ item }}</li>
+            <!-- v-for=" 임시변수 in 배열 
+             in을 중간에 두고, v-bind:class="item"= 속성으로 넣거나 ,  {{ item }} 텍스트로 넣거나 둘다 가능 -->
+        </ul>
+        <ul>
+            <h3>객체로 값을 구성한 배열을 이용한 for 디렉티브</h3>
+            <li v-for="obj in objArray">{{ obj.name }} || {{ obj.price }}</li>
+            <!-- v-for="obj in objArray"위 랑 다른점 obj가 객체 -->
+        </ul>
+        <ul>
+            <h3>단순히 태그를 반복하는 경우</h3>
+            <li v-for="n in 10">{{n}} * 3 = {{ n* 3 }}</li>
+            <!-- "n in 10"정수가 들어가는 경우 양수값만 받기 가능 -->
+        </ul>
+        <ul>
+            <h3>인덱스를 사용하는 경우</h3>
+            <li v-for="(item, index) in myArray">{{ index + ' : ' + item }} </li>
+            <!--"(값, 인덱스) in 배열", 인덱스는 사용시 적어주기 -->
+        </ul>
+        <hr>
+
+        <!-- 이중for문 -->
+        <!-- <ul v-for="dan"> -->
+        <ul v-for="dan in 9 ">
+            <h1>{{dan}} 단 입니다.</h1>
+            <li v-for="num in 9">{{ dan }} X {{ num }} = {{ dan * num }}</li>
+            <!-- 기존 반복문이랑 다른점 : 태그랑 같이 움직임
+                이중for 사용시 바깥 for문 값 사용가능 -->
+        </ul>
+        <ul v-for="dan in 9 ">
+            <h1>{{dan}} 단 입니다.</h1>
+            <li v-for="num in dan">{{ dan }} X {{ num }} = {{ dan * num }}</li>
+            <!-- 기존 반복문이랑 다른점 : 태그랑 같이 움직임
+                이중for 사용시 바깥 for문 프로퍼티(변수) 사용가능 -->
+        </ul>
+    </div>
+
+    <script>
+        // //idx, val = 안쓰는 건 안받아도 됨 = v-for="(item, index) in myArray"
+        // $(dataList).each(function(idx, val){
+        // });
+
+        new Vue({
+            el: '#app',
+            data: {
+                myArray: ['설악산', '한라산', '북한산', '백두산', '지리산'],
+                objArray: [{
+                        name: '슈크림빵',
+                        price: 1000
+                    },
+                    {
+                        name: '단팥빵',
+                        price: 1500
+                    },
+                    {
+                        name: '크루와상',
+                        price: 2000
+                    }
+                ]
+            }
+        });
+    </script>
+
+    <hr>
+    <div id="app2">
+        <h3>관심 받고 있는 언어 랭킹</h3>
+        <table>
+            <thead>
+                <th v-for="item in header">{{ item }}</th>
+            </thead>
+            <tbody>
+                <!-- 이중배열 -->
+                <tr v-for="line in ranking">
+                    <!-- 배열에서 꺼냄-->
+                    <!-- line : [] -->
+                    <td v-for="item in line">{{ item }}</td> <!-- 배열에서 또 꺼냄-->
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <script>
+        let headerData = ['프로그래밍 언어', 2018, 2013, 2008, 2003, 1998];
+        let rankingData = [
+            ['Java', 1, 2, 1, 1, 16], //1행
+            ['C', 2, 1, 2, 2, 1],
+            ['C++', 3, 4, 3, 3, 2],
+            ['Python', 4, 7, 6, 11, 23],
+            ['JavaScirpt', 7, 10, 8, 7, 20],
+
+        ];
+
+        new Vue({
+            el: '#app2',
+            data: {
+                header: headerData,
+                ranking: rankingData
+            }
+        })
+    </script>
+
+
+
+    <hr>
+    <!-- for문은 기본적으로 배열이랑 같이 움직일수 밖에 없음
+        배열을 다룰 시 주의사항 실습 -->
+    <div id="app3">
+        <h3>목록을 구성하는 데이터 변경 시 목록 업데이트</h3>
+        <ul>
+            <li v-for="item in myArray">{{item}}</li>
+        </ul>
+        <button @click="addlast">맨 뒤에 추가</button>
+        <button @click="addobj(3)">네번째에 추가</button>
+        <button @click="changeObj(0)">첫번째에 추가</button>
+        <button @click="deleteObj(1)">두번째에 삭제</button>
+    </div>
+    <script>
+        let data = ['첫번째', '두번째', '세번째', '네번째', '다섯번째'];
+        new Vue({
+            el: '#app3',
+            data: {
+                myArray: data
+            },
+            methods: {
+                //vue = data기반 동작 명심!☆(데이터는 여러개의 태그에 묶일 수 있다. 데이터를 기반으로 동작하는 모든 태그에 영향을 줘야한다)
+                // 프로퍼티사용해서 제어
+                addlast: function () {
+                    // myArray : 맨뒤에 '[맨 뒤에 추가]'추가
+                    // 배열관련 메소드에서만 인지(자스기준 인식가능한 것들)
+                    // this.myArray[this.myArray.length] ='[맨 뒤에 추가 ]'; //인식못함
+                    this.myArray.push('[맨 뒤에 추가]');
+
+                },
+                addobj: function (index) {
+                    // myArray : 정해진 인덱스에 '[추가]'추가
+                    this.myArray.splice(index,0,'[추가]');
+                    // splice : 주롱 매개변수 3개 받음
+                    // (idex,0,'[추가]') = (정해진인덱스기준, 삭제할거, 추가할거)
+
+                },
+                changeObj: function (index) {
+                    // myArray : 정해진 인덱스에 텍스트 값을 '[변경]'수정
+                    this.myArray.splice(index,1,'[변경]');
+                },
+                deleteObj: function (index) {
+                    // myArray : 정해진 인덱스에 값을 삭제
+                    this.myArray.splice(index,1);
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

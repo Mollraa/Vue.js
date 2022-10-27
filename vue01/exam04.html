@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <script>
+    /*
+      1. 입력금지 문자열을 ,(콤마) 기준으로 입력할 수 있다.
+      2. 제한 시간을 넣고 시작버튼을 누르면 텍스트를 넣을 수 있다.
+      3. 제한 시간이 실시간으로 표시된다.
+      4. 입력중 금지 문자열이 나올 경우 경고를 뛰우고
+         확인버튼을 누르면 해당문자열은 삭제되며 시간이 +10초 추가된다.
+      5. 제한 시간이 완료되면 텍스트 입력창은 비활성화되고
+         입력 창 아래 입력한 문자의 개수가 표시되며
+         금지어를 사용한 횟수 * 12 한 벌점을 출력한다
+    */
+   document.addEventListener('DOMContentLoaded', function(){
+    new Vue({
+    el : '#app',
+    data : {
+      forhiddenText : '',
+      isWritable : true,
+      limitTime : 0,
+      setTime : 0,
+      inputText : '',
+      timerObj : null,
+      wordCnt : 0,
+      forhiddenCnt : 0
+    },
+    methods : {
+      start : function(){
+        
+      }
+    },
+    watch : {
+      limitTime : function(){
+        clearInterval(this.timerObj);
+        this.limitTime = 20;
+        this.timerObj = setInterval(() => {
+          this.limitTime--
+        }, 1000);
+      },
+      inputText : function(){
+        return this.wordCnt.length++;
+        
+      }
+    },
+    computed : {
+      resultScore : function(){
+        return this.wordCnt.length++;
+      }
+    }
+   })
+   })
+   
+  </script>
+  <div id="app">
+    <h1>제한 시간내에 문자 입력하기</h1>
+    <label>
+      금지문자(,로 나누어 복수입력가능)
+      <input type="text" v-model="forhiddenText" v-bind:disabled="!isWritable" >
+    </label>
+    <br>
+    <label>
+      제한시간을 입력하세요(초)
+      <input type="number" v-model="setTime" v-bind:disabled="!isWritable">
+      <button v-on:click="start" v-bind:disabled="!isWritable">시작</button>
+    </label>
+    <p>남은시간 : {{ limitTime }}초</p>
+    <textarea v-model="inputText" v-bind:disabled="isWritable"></textarea>
+    <p> {{ wordCnt }}개의 문자를 입력하였습니다.</p>
+    <p> 별점 : {{ resultScore }} (금지문자 1개당 12점)</p>
+  </div>
+</body>
+</html>

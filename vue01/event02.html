@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <!-- ☆computed 속성 : 프로퍼티의 일종, 속성의 프로퍼티를 연산한 값 -->
+    <!-- ☆watch 속성 : 프로퍼티의 변화를 감지해서 필요한 프로세스 진행 -->
+    <!-- 둘다 데이터의 변화를 감지해서 즉각적 반응함 -->
+    <div id="app">
+        <input type="number" v-model.number="price">원<br>
+        <input type="number" v-model.number="count">개<br>
+        <p>합계 : {{ sum }}</p>
+        <p>부가세 포함 금액 : {{ taxIncluded }}</p>
+        <br>
+        <input v-model="today">
+        {{today}}
+        <br>
+        <p>감상은 140자 이내로 입력해주세요. ^^</p>
+        <p v-bind:style="{color : computedColor}">남은 글자는 {{remainig}}</p>
+        <textarea v-model="myText" v-bind:disabled="disTextArea"></textarea>
+        <hr>
+        <p v-text="printDate()"></p>
+        <button @click="getDate">날짜</button>
+    </div>
+
+    <script>
+        // data, computed 두개 필요 
+        new Vue({
+            el: '#app',
+            data: {
+                price: 0,
+                count: 0,
+                myText: ''
+                //v-model- 무조건 데이터속성
+            },
+            computed: {
+                //computed : 산출 프로퍼티 -> data 속성의 프로퍼티에 의존적.
+                //          즉, 외부에서 값을 받을 수 없고. 상수처럼 사용. 매개변수 존재 불가능
+                sum: function () {
+                    return this.price * this.count;
+                },
+                taxIncluded: function () {
+                    //taxIncluded는 실제 값은 없지만, 가지고오는 sum에 값이 있어서 의존 가능
+                    return this.sum * 1.1;
+                },
+                today: function () {
+                    // 쓸수 있지만 의미 없는 값
+                    return new Date();
+                },
+                computedColor: function () {
+                    let col = 'green';
+
+                    if (this.remainig < 20) {
+                        col = 'orange';
+                    }
+                    if (this.remainig < 1) {
+                        col = 'red';
+                    }
+                    return col;
+                },
+                remainig: function () {
+                    return 140 - this.myText.length;
+                },
+                disTextArea: function () {
+                    let value = false;
+                    if (this.remainig < 1) {
+                        value = true;
+                    }
+                    return value;
+                }
+            },
+            methods: {
+                // 내가 값이 필요한데 데이터연결은 안되있음, 값이 필요할 때 마다 메소드 이용가능 한거 알수있음, 연산시점다름 유의 
+                printDate: function () {
+                    return '오늘날짜 : ' + Date.now();
+                },
+                getDate: function () {
+                    alert(this.printDate());
+                }
+            }
+        });
+    </script>
+
+
+
+
+    <!-- jquery -->
+    <hr>
+    <div id="app2">
+        <!-- input의 value 속성이 비어있으면 모든 데이터가 보이고,
+            검색을 하면 해당되는 데이터만 보이도록 -->
+        <input type="text">
+        <ul>
+        </ul>
+    </div>
+    <script>
+        // 문제 -> 알고리즘 생각. 주석으로 풀이 작성 -> 필요한 문법
+        let dataList = ['설악산', '한라산', '북한산', '백두산', '지리산'];
+
+        // 1. input 입력에 따른 변화 -> 이벤트, 이벤트 핸들러를 등록
+        // input -> 설악산 = 설악산 
+
+        // 2. 입력이 없을 경우 dataList가 전부 목록으로 출력
+        // input이 비어있으면 list 
+
+        // 3. 한글자라도 입력이 있을 경우 dataList에서 포함되는 값을 분류
+        // input -> 설 = 설악산 보이게, 산 = '설악산', '한라산', '북한산', '백두산', '지리산'
+        // function print(){
+        //     const name = document.getElementById('name').value;
+        //     document.getElementById("result").innerText = name;
+        // }
+
+        // 4. 그 분류한 걸 기존의 목록을 대체
+        // 
+        //---------------------------------- 제이쿼리
+        $(document).ready(function () {
+
+            init();
+
+            $('#app2 > input:text:eq(0)').on('change', changeData);
+
+            function changeData() {
+                $('#app2 > ul:first').empty();
+
+                let keyword = $('#app2 > input:text:eq(0)').val();
+                if (keyword != '') {
+                    $(dataList).each(function (idx, val) {
+                        if (val.match(keyword)) {
+                            $('#app2 > ul:first').append(
+                                $('<li />').text(val)
+                            );
+                        }
+                    })
+                } else {
+                    init();
+                }
+            }
+
+
+            function init() {
+                $(dataList).each(function (idx, val) {
+                    $('#app2 > ul:first').append(
+                        $('<li />').text(val)
+                    );
+                });
+            }
+        });
+        // ----------------------------------------- 제이쿼리로 풀이 end
+    </script>
+
+
+    <!-- Vue -->
+    <!-- v-for : 반복 -->
+    <div id="app3">
+        <input type="text" v-model="findWord">
+        <!-- v-model="findWord" : 오류. 이거빼먹음 -->
+        <ul>
+            <li v-for="item in findItems">{{ item }}</li>
+        </ul>
+    </div>
+    <script>
+        new Vue({
+            el: '#app3',
+            data: {
+                findWord: '',
+                items: dataList // 원본데이터
+            },
+            computed: {
+                findItems: function () {
+                    if (this.findWord) {
+                        //console.log('computed :',this);
+                        return this.items.filter(function (value) {
+                            // console.log('filter : ', this)
+                            return (value.indexOf(this.findWord) > -1);
+                        }, this);
+
+                    } else {
+                        return this.items;
+                    }
+                }
+            }
+        })
+    </script>
+
+
+    <!-- new Vue({
+            el: '#app3',
+            data: {
+                findWord: '',
+                items: dataList //원본데이터
+            },
+            computed: {
+                findItems: function () {
+                    if (this.findWord) {
+                        // console.log('computed : ',computed); 이거말고
+                        return this.items.filter(function (value) {
+                            // console.log('filter : ',filter); 여기 this를 써라 ~ 라는 의미 
+                            return (value.indexOf(this.findWord) > -1);
+                        }, this);
+                        //  if (this.findWord) {의  this와  }, this);의 this는 다름
+                    } else {
+                        return this.items;
+                    }
+                }
+            }
+        }) -->
+    </script>
+
+
+
+
+    <!-- watch -->
+    <div id="app4">
+        <p>금지문자 [ {{ forhiddentText }} ]</p>
+        <textarea v-model="inputText"></textarea>
+        <br>
+        <br>
+        <p>앞으로 {{ restSec }}</p>
+        <button v-on:click="startTimer">Start</button>
+    </div>
+    <script>
+        new Vue({
+            el: '#app4',
+            data: {
+                forhiddentText: '주말',
+                inputText: '',
+                restSec: 10,
+                timerObj: null
+                // timerObj : 타이머
+            },
+            methods: {
+                startTimer: function () {
+                    clearInterval(this.timerObj); //clearInterval : 자스메소드
+                    this.restSec = 10;
+                    this.timerObj = setInterval(() => {
+                        this.disabledrestSec--
+                    }, 1000);
+                    // setInterval = 스캐줄러 역할, 정해진 시간많큼 동작
+                }
+            },
+            //watch = 새로운 프로퍼티생성 아님, 기존의 프로퍼티중 감시하고 자 하는 대상
+            //         매개변수, 리턴구문 둘다 필요 없중, 값이 변할 때 마다 동작
+            watch: {
+                inputText: function () {
+                    let pos = this.inputText.indexOf(this.forhiddentText);
+                    if (pos > -1) {
+                        alert(this.forhiddentText + '는 입력할 수 없습니다. ');
+                        this.inputText = this.inputText.substr(0, pos); //처음부터 금지어 입력된 곳 까지 삭제 
+                        // substr 삭제시키는 아이(지우는 것 처럼 보이지만, 금지문자 제외 후 가지고옴), Vue가 아님
+                        //  ex)오늘은 주말 : 제외 할 곳의 인덱스 앞까지 가지고옴. -> 오늘은 .공백 까지 가져옴
+                    }
+                },
+                restSec: function () {
+                    // restSec : 값이 들어 갈 때 마다 확인
+                    if (this.restSec <= 0) {
+                        alert('제한시간 입니다.')
+                        clearInterval(this.timerObj);
+                    }
+                }
+            }
+        });
+        // 결론 : 둘다 체인지이벤트라는건 비슷, computed 값을 산출(원하는 값) <-> watch 있는 값 비교(매순간 순간의 값)
+    </script>
+
+
+</body>
+
+</html>

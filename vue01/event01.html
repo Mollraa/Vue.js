@@ -9,10 +9,12 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
 </head>
 <style>
-    .tag{
-        border: ;
+    .tag {
+        margin: 10px;
+        border: 2px solid deeppink;
     }
 </style>
+
 
 <body>
     <!-- v-on 디렉티브 : 이벤트 등록하는 디렉티브, Vue인스턴스 안에 등록된 methods에 정의한 함수만 핸들러로 사용가능-->
@@ -85,21 +87,40 @@
 
     <!-- 수식어 복합가능 -->
     <div id="app2" v-bind:class="style">
-        <form action="http://www.naver.com" :class="style" @click="printMessage('form 태그 선택')" v-on:submit.prevent>
-            <div v-bind:class="style" @click.selg.once="printMessage('p 태그 선택')">
-                <a v-bind:class="style" href="http://www.google.com" v-on:click.prevent="printMessage('a 태그 선택')"></a>
-                 
+        <form action="http://www.naver.com"
+            :class="style"
+            @click="printMessage('form 태그 선택')"
+            v-on:submit.prevent> <!--submit : false상태, 필요시 함수등록 그래도 동작 안 할 수있음-->
 
+            <div v-bind:class="style"
+            v-on:click.stop="printMessage('div 태그 선택')">
+
+                <p v-bind:class="style" 
+                @click.self.once="printMessage('p 태그 선택')">
+                <!--self: 본인만 발생, stop은 아님 <->  @click.self.once.stop 하면 멈춰야하는데 찾아보고 알려주신다함 stop위치가 중요 -->
+
+                    <a v-bind:class="style" 
+                    href="http://www.google.com"
+                    v-on:click.prevent="printMessage('a 태그 선택')">
+                    구글
+                    </a>
+                    {{ message }}
+                </p>
             </div>
         </form>
+        <div :class="style">
+            <!-- v-on:~ = @ , on디렉티브 약어-->
+            <span @click="changeMessage($event), alertExcute()">이벤트 핸들러 복수 실행</span>
+
+        </div>
     </div>
     <script>
         // 이벤트 수식어 -> on 디렉티브에 연결되는 이벤트 동작을 제어
-        // .stop : 이벤트 버블링, 이벤트 전파를 차단
-        // .prevnet : 기본 이벤트 핸들러를 중지
+        // .stop : 이벤트 버블링, 이벤트 전파를 차단 (필수기억)
+        // .prevnet : 기본 이벤트 핸들러를 중지 (필수기억)
+        // .self : Event 객체의 target == currentTarget인 경우에만 이벤트 핸들러 동작 (필수기억)
+        // .once : 최대 한번만 동작 (필수기억)
         // .capture : 이벤트 캡쳐링 중단
-        // .self : Event 객체의 target == currentTarget인 경우에만 이벤트 핸들러 동작
-        // .once : 최대 한번만 동작
         // .passive : wheel(스크롤) 이벤트 동작 시 실제 화면에서 스크롤된 것과 로직을 분리
 
         new Vue({
@@ -109,24 +130,25 @@
                 message: ''
             },
             methods: {
-                printmessage: function (message) {
+                printMessage: function (message) {
                     this.message = message;
                     alert(message);
                 },
                 changeMessage: function (event) {
                     if (event) {
                         // 꼭 알고 있기 
-                        console.assert(event.target); //최초로 이벤트가 발생한 대상
+                        console.log(event.target); //최초로 이벤트가 발생한 대상
                         console.log(event.currentTarget); //현재 이벤트관련 핸들러를 실행하는 대상
                         this.message = "이벤트 실행 target : " + event.target;
                     }
                 },
-                alretExcute: function () {
+                alertExcute: function () {
                     alert('이벤트 핸들러 복수 등록');
                 }
             }
         });
     </script>
+
 </body>
 
 </html>

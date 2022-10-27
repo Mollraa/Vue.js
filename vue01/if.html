@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- 태그 자체에 if를 써서 생성 시킬지 말지 결정 -->
+    <div id="app">
+        <label><input type="checkbox" v-model="myVisible">표시</label>
+        <p v-if="myVisible" id="test">체크박스가 ON</p>
+        <p>새로운 p태그</p>
+        <!--v-if, else깨지고, 새로운 p만 작동, ☆주의 : 해당 조건에 대해 중간에 관련없는 태그 들어가면 안됨-->
+        <p v-else>체크박스 OFF</p> <!-- v-if의 false혹은 기타사항-->
+        <br>
+        <br>
+        <br>
+        <p v-if="type == 'A'">A</p>
+        <p v-else-if="type == 'B'">B</p>
+        <!--v-else-if : 필요한 많큼 사용가능-->
+        <p v-else-if="type == 'C'">C</p>
+        <p v-else>기타 : {{type}}</p>
+        <input v-model="type">
+        <!-- 조건을 만족하는 태그 하나만 등장 -->
+        <br>
+        <br>
+        <button v-show="isShow" v-on:click="isShow = false">선택</button>
+
+    </div>
+
+
+    <script>
+        // v-if="myVisible"가 걸린 태그 자체를 빼버림, 접근금지 = 값이 사라지니까 신중하게 사용
+        new Vue({
+            el: '#app',
+            data: {
+                myVisible: false,
+                type: '',
+                isShow: true
+            }
+        })
+    </script>
+</body>
+
+</html>

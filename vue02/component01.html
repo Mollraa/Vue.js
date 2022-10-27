@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+
+</head>
+
+<body>
+    <!-- component : 재활용이 가능한 뷰 인스턴스 -->
+    <div id="app">
+        <!-- 'my-component' = 사용자 정의 태그 처럼 사용 -->
+        <my-component></my-component>
+        <instance-component></instance-component>
+
+    </div>
+    <script>
+        //전역등록 -> 앞으로 생성될 모든 vue인스턴스에서 사용할 수 있는 컴포넌트
+        Vue.component('my-component', {
+            // template등록시 ``사용
+            template: `<div>
+                            <h1>사용자 정의 컴포넌트 입니다.</h1>
+                        </div>`
+        });
+
+        // 지역 등록(인스턴스에 등록) -> 개별 vue인스턴스에서 사용할 수 있는 컴포넌트
+        new Vue({
+            el: '#app',
+            // component - 등록 안해도 사용가능, 등록도 가능
+            components: {
+                'instance-component': {
+                    //template구상시 `<div></div>`하나의 태그만 사용, 제일먼저 작성, 감싸주기
+                    template: `<div style="border:4px solid pink;">
+                                    <span>
+                                        <h3>
+                                            <em>인스턴스로 등록한 컴포넌트입니다.</em>
+                                        </h3>
+                                    </span>
+                                </div>`
+                }
+            }
+        });
+    </script>
+
+    <div id="app2">
+        <my-component></my-component>
+        <instance-component></instance-component>
+        <m-component></m-component>
+        <m-component></m-component>
+        <m-component></m-component>
+        <m-component></m-component>
+
+    </div>
+
+    <script>
+        const mComponent = {
+            template: '<p class="my-comp">Hello</p>'
+        }
+        new Vue({
+            el: '#app2',
+            components: {
+                // 내부에서 이름 같아도 상관없음 클래스 느낌 
+                'instance-component': {
+                    template: `<div>
+                                <strong>두번째 인스턴스에 등록된 컴포넌트입니다.</strong>
+                                </div>`
+                },
+                'm-component': mComponent //재사용 
+            }
+        });
+    </script>
+
+
+    <div id="app3">
+        <my-component></my-component>
+        <my-component></my-component>
+    </div>
+    <script>
+        const myComponent = {
+            // component = vue instance 
+            template: `<p class="my-copm">
+                            카운터
+                            <button v-on:click="addOne">추가</button>
+                            {{ count }}
+                        </p>`,
+            data: function () {
+                //component는 data함수 처리 -> retrun 객체로 해줌
+                // 필요시 연산 가능
+                return {
+                    count: 0
+                }
+            },
+            methods: {
+                addOne: function () {
+                    this.count++;
+                }
+            }
+        };
+
+        new Vue({
+            el: '#app3',
+            components: {
+                'my-component': myComponent
+            }
+        });
+    </script>
+</body>
+
+</html>

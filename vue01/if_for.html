@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>if_for</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>배열 줄 짝수에 해당하는 값만 출력</h1>
+        <!-- 배열 for -->
+        <!-- 짝수에 해당 값 if -->
+        <ul>
+            <!-- 1 -->
+            <!-- <li v-for="item in myArray" v-if="item % 2 == 0">{{item}}</li> -->
+            <!-- if가 for보다 우선순위가 높아서 같이쓰는건 추천안함 -->
+
+            <!-- for_if = template -->
+            <template v-for="item in myArray">
+                <!-- template : 반복. 기억해두기 교수님 tip mdn-->
+                <!-- 실제 생설될 태그 -->
+                <li v-if="item % 2 == 0">{{item}}</li>
+            </template>
+
+            <!-- 2 -->
+            <h3>데이터 반환을 통한 짝수만 출력</h3>
+            <ul>
+                <li v-for="item in myArray">{{ item }}</li>
+            </ul>
+            <button v-on:click="event1">짝수만 표시</button>
+            <button v-on:click="event2">홀수만 표시</button>
+        </ul>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myArray: [1, 2, 3, 4, 5, 6],
+                originalData: [1, 2, 3, 4, 5, 6]
+            },
+            methods: {
+                event1: function () {
+                    this.myArray = this.originalData.filter(function (value) {
+                        return value % 2 == 0;
+                    });
+                },
+                event2: function () {
+                    this.myArray = this.originalData.filter(function (value) {
+                        return value % 2 != 0;
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
