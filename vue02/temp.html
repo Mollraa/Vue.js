@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>template: 테스트 하는 곳</title>
+</head>
+<body>
+    <!--  template: 테스트 하는 곳  -->
+    `<div>
+        <div>
+            <div>
+                <label for="user_name">이름</label>
+                <input type="text" id="user_name" v-model="userName">
+            </div> 
+            <div>
+                <label for="user_age">나이</label>
+                <input type="Number" id="user_age" v-model.number="userAge">
+            </div>  
+            <div>
+                <label for="user_dept">소속</label>
+                <select id="user_dept" v-model="userDept">
+                    <option>학생</option>
+                    <option>교수</option>    
+                </select>
+            </div> 
+            <div>
+                <h2>등록 예정 참여자 정보</h2>
+                <p> 이름 : {{ userInfo.name}}</p>
+                <p> 나이 : {{ userInfo.age}}</p>
+                <p> 소속 : {{ userInfo.dept}}</p>
+            </div>
+            <button v-on:click="insertUsers">등록</buttom>        
+        </div>
+        <div>
+        <print-component v-for="item in userList" v-bind="item"></print-component>
+        </div>
+    </div>`
+</body>
+</html>

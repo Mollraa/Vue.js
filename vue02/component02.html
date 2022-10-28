@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>component02</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+</head>
+
+<body>
+    <!--
+        컴포넌트 간단 정리
+        1. component 하위의 독립된 객체 -> 값을 전달할 때 내부의porps 속성을 이용해서 프로퍼티 정의
+        2. 복수로 정의된 프로퍼티일 경우 개별적으로 v-bind디렉티브 연결
+        3. 복수로 정의된 프로퍼티들을 필드로 가지는 객체를 v-bind의 값으로 넘겨줌
+        3-1) data속성에 객체로 정의
+        3-2) computed 속성에 객체를 반환하는 함수로 정의
+        4. v-bind 디렉티브를 연결하지 않은 상태에서 값을 넘길 때는 반드시 문자로 넘어감
+        4-1) 문자를 제외한 자바스크립트 사용하는 타입을 값으로 넘기고 싶을 경우에는 v-bind 디렉티브 연결
+    -->
+    <div id="app">
+        <input v-model="name">
+        <!-- component에 myName전달 예정 -->
+        <!-- v-bind:today="new Date()" -->
+        <name-component v-bind:today="200+15" v-bind:my-name="name"></name-component>
+        <!-- v-bind : 바인드 되는순간 자스영역 -->
+        <!-- v-bind:my-name="" = myName은 지금 속성값, myNname -> myname이렇게 인식해서 오류남 -->
+        <input v-model="array.myName">
+        <name-compnent v-bind="dataList"></name-compnent> <br>
+        <name-component my-name="영희" v-bind:today="new Date()"></name-component>
+        <!-- v-bind:today="100"=숫자인식, today="100"=문자인식 -->
+
+        <input v-model="array.myName">
+        <name-component v-bind:my-name="12.5"></name-component>
+    </div>
+
+    <script>
+        const component = {
+            template: `<p>{{ today + 1 }}, 나는 {{ myName }}입니다.</p>`, //내부
+
+            
+            props: ['today', 'myName'], // 외부에서 값을 받아오는 프로퍼티, 외부와 소통하는 프로퍼티
+            // props : 부모와 연결 , 외부와 유일한 소통창구, 여러개 값을 개별바인드, 배열바인드 가능
+
+            //외부에서 받아온 값 체크
+            created: function () {
+                if (this.myName == null || this.myName == 0) {
+                    this.myName = '아무것도 없지롱~';
+                }
+                if (this.today == null || this.today == 0) {
+                    this.today = -1;
+                }
+            },
+            
+            //위 배열로 보이지만, 객체로 처리가능. p147
+            props: {
+                myName: String,
+                today: {
+                    type: Number,
+                    required: true,
+                    default: -1
+                }
+            }
+            
+        
+        }
+
+        //부모 
+        new Vue({
+            el: '#app',
+            data: {
+                name: '',
+                array: {
+                    myName: '',
+                    today: 205
+                }
+                // today: Date.now() //임의 데이터, 없어도 됨
+            },
+            computed: {
+                dataList: function () {
+                    return {
+                        myName: this.name,
+                        today: Date.now()
+                    }
+                }
+            },
+            components: {
+                'name-component': component
+            }
+        });
+    </script>
+    <hr>
+
+
+    <!-- 2. 내부에서 동작하거나, 위로 보낼 때  -->
+    <div id="app2">
+        <p> {{ count }} </p>
+        <button v-on:click="countUp">증가</button>
+        <!-- 부모가 보내는 값은 거절불가 -->
+        <!-- <count-component v-bind:my-count="count"></count-component> -->
+        <count-component v-bind:my-count.sync="count"></count-component> <!-- 강제 동기화, sync + emit-->
+        <!--sync :  v-bind:my-count.sync="count" =인데 v-on:update:my-counter="val(emit이 보낸 값) -> bar=val" 을 수식어로 처리 -->
+
+    </div>
+
+    <script>
+        const countComponent = {
+            template: `<div>
+                <p> {{ myCount }} </p>
+                <button v-on:click="myCountUp">자식증가</button>
+                </div>`,
+            props: ['myCount'],
+            methods: {
+                myCountUp: function () {
+                    this.myCount++;
+                    this.$emit('update:myCount', this.myCount); //emit = 이벤트거는 메소드 (동기식, 안쓰는거 추천)
+                }
+            }
+        }
+        new Vue({
+            el: '#app2',
+            data: {
+                count: 0
+
+            },
+            methods: {
+                countUp: function () {
+                    this.count++;
+                }
+            },
+            components: {
+                //여기 추가하면 끝 
+                countComponent // 이름같으면 가능 . countComponent : countComponent
+                // -> 'count-component' : countCompnent
+                // btnComponent
+            }
+        })
+    </script>
+
+
+
+
+    <hr>
+    <!-- 3. 이벤트를 통한 통신 -->
+    <!-- 컴포넌트 간의 통신이 중요 ☆ -->
+    <div id="app3">
+        <!-- 자식보고 -> 부모확인 -> 동작 -->
+        <p>{{ counter }}</p>
+        <button @click="incrementCounter">카운터 증가</button>
+        <button-component v-on:increment-me="incrementCounter"></button-component>
+        <count-component v-on:count-up="incrementCounter"></count-component>
+        <!-- v-bind:my-count="count" v-on:update:my-counter="val => bar=val" -->
+    </div>
+    <script>
+        // $on -> 컴포넌트 간에 이벤트를 수신하는 경우 
+        // $emit -> event를 발생 (상위 컴포넌트에 메세지 보낼때 많이 사용) 
+
+        const btnComponent = {
+            template: `<div>
+                <button v-onclick="childIncrementCounter()">
+                    자식으로부터 증가</button>
+                </div>`,
+            methods: {
+                childIncrementCounter: function () {
+                    this.$emit('increment-me');
+                    // increment : 이벤트 | increment-me : 사용자가 정의하는 이벤트
+                }
+            }
+        }
+
+        const counterComponent = {
+            template: `<div>
+                <input v-model="counter">
+                <button v-on:click="counting"> {{ counter }} </button>
+                </div>`,
+            data: function () {
+                return {
+                    counter: 0
+                }
+            },
+            methods: {
+                counting: function () {
+                    this.counter++;
+                }
+            },
+            watch: {
+                counter: function () {
+                    this.$emit('count-up');
+                }
+            }
+        }
+
+        new Vue({
+            el: '#app3',
+            data: {
+                counter: 0
+            },
+            methods: {
+                incrementCounter: function () {
+                    this.counter++;
+                }
+            },
+            components: {
+                'button-component': btnComponent,
+                'count-component': counterComponent
+            }
+        })
+    </script>
+</body>
+
+</html>
