@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+ 
+</head>
+
+<body>
+    <div id="ex01">
+        <h1>배열 메서드</h1>
+        <ul id="menu1">
+            <li>내용1-1</li>
+            <li>내용1-2</li>
+            <li>내용1-3</li>
+        </ul>
+        <ul id="menu2">
+            <li>내용2-1</li>
+            <li>내용2-2</li>
+            <li>내용2-3</li>
+        </ul>
+    </div>
+</body>
+
+<!-- 배열start -->
+<script>
+    //each start
+    let obj = [{
+            "area": "서울"
+        },
+        {
+            "area": "대구"
+        },
+        {
+            "area": "전주"
+        },
+    ];
+
+    //each() ->배열에 대해 순환(처음부터 끝까지)
+    let ulTag = $('<ul/>'); //ul태그 만듬
+
+    //ex)
+    // $(obj) = 배열을 담고있는 변수 감싸기
+    // //obj test
+    // $(obj).each(function(a,b,c) {
+    //     console.log('a,,b,c : ' + a,b,c);
+    // });
+
+    $(obj).each(function (index, object) {
+        console.log(index, object);
+        let liTag = $('<li/>').text(object["area"]);
+        //[필드값] , (객체에담긴값) 변수를이용해서 값을넘길때
+        // 변수를 넘기는지 필드를 넘기는지 이해
+        ulTag.append(liTag);
+    });
+
+    // for(field in obj[0]){
+    //     console.log(field, obj[0][field]);
+    //     //obj[0].field = .은 필드명이 아니라 변수명
+    //     //obj[0][field] = []
+    // }
+    $('#ex01').append(ulTag); //지금append = 자스. 자식태그로 넣음
+
+
+
+    //each() - 2번째 방법
+    console.log("==================");
+    //$자체가 호출가능
+    $.each(obj, function (idx, obj) {
+        console.log(idx + " : ", obj);
+        //obj는 객체라서 강제스트링으로 안됨. 직접필드로 내부값을 꺼내거나 or ,로 매개변수 나눠줌
+    });
+
+    console.log("==================");
+    $('#menu1 li').each(function (idx, tag) {
+        //tag = node
+        console.log('.textContent : ' + idx, tag.textContent);
+        //tag.textContent -  프로퍼티 값 직접 가져옴
+
+        console.log('$(tag).text() : ' + idx + " : " + $(tag).text());
+    });
+
+    console.log("00==================");
+    $.each($('#menu1 li'), function (idx, tag) {
+        console.log('.textContent : ' + idx, tag.textContent);
+        console.log('$(tag).text() : ' + idx + " : " + $(tag).text());
+    });
+
+    console.log("==================");
+    $('#ex01 li').each(function (idx) {
+        // console.log('idx : ' + idx + ' : ', this);
+        console.log('idx : ' + idx + ' : ', $(this).text()); //this어디서 사용하는냐에 따라 값 유추하면서 쓰기
+        //li하나씩 = function실행
+    });
+    //each end
+</script>
+
+
+
+<!-- map, grep -->
+<script>
+    let arr1 = [{
+            "area": "서울",
+            "dept": "영업",
+            "name": "백제니"
+        },
+        {
+            "area": "부산",
+            "dept": "영업",
+            "name": "노지수"
+        },
+        {
+            "area": "대전",
+            "dept": "생산",
+            "name": "킴리사"
+        },
+        {
+            "area": "서울",
+            "dept": "생산",
+            "name": "이로제"
+        },
+    ]
+
+    //map start
+    //$.map() -> return 값만 갖고 새로운 배열(조건에 해당하는 값만 있으면 됨)
+    // $.map(arr1, function(obj, idx){
+    //      // console.log('map : ' + obj, idx);
+    //     if(obj.area == "서울"){
+    //         return obj;
+    //     }
+    // });
+
+    let arr2 = $.map(arr1, function (obj, idx) {
+        if (obj.area == "서울") {
+            return obj;
+        }
+    })
+    //1)
+    // .forEach(function(obj, idx){
+    //     console.log(obj, idx);
+    // });
+
+    // 2)
+    // arr1.forEach(function(obj, idx){
+    //     console.log(obj, idx);
+    // });
+
+    //3)
+    $(arr2).each(function (idx, obj) {
+        console.log('idx, obj : ' + idx, obj);
+    });
+
+    //4)
+    // $(arr2).e <-> arr2.e 
+    //map end
+
+
+
+
+
+    //grep start
+    //$.grep() -> 오름차순 정렬(기본)
+    //         -> return이 ture인 값만 가지고 새로운 배열
+    console.log("==================");
+
+    let arr3 = $.grep(arr1, function (obj, idx) {
+        if (obj.dept == "영업") {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    $.each(arr3, function (idx, obj) {
+        console.log(idx, obj);
+    });
+    //grep end
+</script>
+
+
+
+<!-- 실습 -->
+<div id="ex02">
+    <!-- 출력 - (litag) 지역:전주, 부서:IT, 이름:백제니 -->
+
+    <!-- 근무지역 : 서울 -->
+    <ul></ul>
+    <!-- 부서 : 영업 -->
+    <ul></ul>
+    <!-- 부서 : 생산 -->
+    <ul></ul>
+</div>
+<script>
+    // obj = {}
+
+    //교수님풀이
+
+    //0) 중복코드 제거
+    function appendTag(tag, datas) {
+        $(datas).each(function (idx, obj) { //each -> li태그로 대체
+            let liTg = $('<li/>').text(
+                '지역 : ' + obj.area + ', 부서 : ' + obj.dept + ', 이름 : ' + obj.name
+            );
+            tag.append(liTg); //제이쿼리 append
+        });
+    }
+
+    //1) 근무지역 : 서울
+    let areaDatas = $.map(arr1, function (obj, idx) {
+        if (obj.area == '서울') {
+            return obj;
+        }
+    });
+
+    let ulTg = $('#ex02 ul:first');
+    /*
+    $(areaDatas).each(function (idx, obj) { //each -> li태그로 대체
+        let liTg = $('<li/>').text(
+            '지역 : ' + obj.area + ', 부서 : ' + obj.dept + ', 이름 : ' + obj.name
+        );
+        ulTg.append(liTg); //제이쿼리 append
+    });
+    */
+    appendTag(ulTg, areaDatas);
+
+    //2) 부서 : 영업
+    let deptDatas = $.grep(arr1, function (obj, idx) {
+        if (obj.dept == '영업') {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    ulTg = ulTg.next();
+    // = ulTg = $('#ex02 ul:first').next();
+
+    /*
+    $(deptDatas).each(function (idx, obj) {
+        //jQuery tag 만들기 -> 자주 안쓰지만 복잡한거 만들때 유용
+        let liTg = $('<li id="'+idx+'">지역 : ' + obj.area 
+                        + ', 부서 : ' + obj.dept
+                        + ', 이름 : ' + obj.name + '</li>');
+        ulTg.append(liTg);
+    })
+    */
+    appendTag(ulTg, deptDatas);
+
+    //다슬다슬: 이 키보드 왤케 구리지^^????
+
+    //3) 부서 : 생산
+    deptDatas = $.map(arr1, function (obj, idx) {
+        if (obj["dept"] == "생산") {
+            return obj;
+        }
+    })
+
+    ulTg = ulTg.next();
+    /*
+    $(deptDatas).each(function(idx,obj){
+        let liTg = $('<li/>').text(
+            '지역 : ' + obj["area"] + ', 부서 : ' + obj["dept"] + ', 이름 : ' + obj["name"]
+        );
+        ulTg.append(liTg);
+    })
+    */
+    appendTag(ulTg, deptDatas);
+</script>
+
+
+
+
+<!-- 배열에 대한 정보 확인, 두개의 배열을 하나로 변환시키는 메서드 -->
+<script>
+    let arry1 = ["서울", "대전", "부산", "전주"];
+
+    let arry2 = ["한국", "미국", "일본", "중국"];
+
+    let obj1 = {
+        "name": "백부장",
+        "area": "중국"
+    };
+
+    let arry3 = [{
+            "name": "김대리",
+            "area": "대전"
+        },
+        {
+            "name": "노사원",
+            "area": "부산"
+        },
+        {
+            "name": "정부장",
+            "area": "서울"
+        },
+        {
+            "name": "유전무",
+            "area": "전주"
+        }
+    ];
+
+    //inArray() -> 배열 안에 데이터가 있다면 인덱스, 없다면 -1
+    if ($.inArray("부산", arry1) != -1) {
+        console.log('해당 데이터가 존재합니다.');
+    }
+
+    //isArray() -> 매개변수로 넘어온 값이 배열인지 확인(유무 = boolean)
+    console.log("arry2의 배열여부 : ", $.isArray(arr2));
+    console.log("obj1의 배열여부 : ", $.isArray(obj1));
+
+    //$.merge() -> 두개의 배열을 하나의 배열로 반환 
+    //             : 첫번째 매개변수로 넘어간 배열에 두번째 매개변수로 넘어간 배열을 추가
+    //$.merge(arry2, arry1);
+
+    $(arry2).each(function (idx, obj) {
+        console.log(idx, obj);
+    })
+</script>
+
+<div id="ex03">
+    <div>
+        <h3>대한민국 도시</h3>
+    </div>
+    <div>
+        <h3>국가</h3>
+    </div>
+</div>
+<script>
+    //1) arry1배열을 대한민국 도시 밑에 p태그로 추가
+    // 내가푼거
+    // $(arry1).each(function (idx, obj) { //each -> li태그로 대체
+    //     let liTg = $('<p/>').text(
+    //         // let arry1 = ["서울", "대전", "부산", "전주"];
+    //         '지역 : ' + obj.area
+    //     );
+    //     $('#ex03 div:contains("대한민국 도시")').append(liTg); //제이쿼리 append
+    // });
+
+    //교수님 풀이
+    $(arry1).each(function (idx, value) {
+        let pTg = $('<p/>').text(value);
+        $('#ex03 div:contains("도시")').append(pTg);
+    })
+
+    //2) arry2배열을 국가 밑에 p태그로 추가
+    //교수님 풀이
+    $.each(arry2, function (idx, value) {
+        let pTg = $('<p/>').text(value);
+        $('#ex03 div:contains("국가")').append(pTg);
+    })
+
+    //3) 1)을 푼 후 arry3배열의 지역에 따라서 이름을 추가 
+    //교수님 풀이
+    $(arry3).each(function (idx, obj) {
+        //이중 for문
+        $('#ex03 div:contains("도시") > p').each(function (idx, tag) {
+            if (tag.textContent == obj.area) {
+                let pT = $('<p/>').text('이름 : ' + obj.name);
+                $(tag).append(pT);
+            }
+        })
+    })
+
+    //3) 2ver
+    $(arry3).each(function (idx, obj) {
+        $('#ex03 div:contains("도시") > p:contains(' + obj.area + ')').append(
+            $('<p/>').text('이름 : ' + obj.name)
+        )
+    });
+</script>
+
+
+<div id="ex04">
+    <ul>
+        <li>내용1</li>
+        <li>내용2</li>
+        <li id="list3">내용3</li>
+        <li>내용4</li>
+    </ul>
+</div>
+
+<script>
+//index
+    //index() -> 선택자를 이용한 결과 중에 검색조건을 만족하는 요소의 인덱스 값(배열기반 검색)
+    let search = $('#ex04 li'); //뭘 검색
+    let index = search.index($('#list3')); //재검색
+    let tag = search.eq(index); //실행
+
+    console.log('tag : ' + tag);
+
+
+</script>
+
+</html>

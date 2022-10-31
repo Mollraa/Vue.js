@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/main">main</router-link>
+        <router-link to="/info">info</router-link>
+        <!-- == <a href="#/main" class="">main</a> -> 이렇게 된다는 의미 
+                (실행->F12 확인 가능), 새로고침 하던말던 경로 안바뀜-->
+
+        <!-- router-link에 따라 생성되는 view -->
+        <router-view></router-view>
+    </div>
+    <script>
+        const mainComponent = {
+            template: '<div><h1>메인 페이지</h1></div>'
+        }
+
+        const infoComponent = {
+            template: '<div><h3>정보 페이지</h3></div>'
+        }
+        // 뷰에서 컴포넌트는 라우터랑 같다... ?
+
+
+        //router는 생성자가 있다.
+        const router = new VueRouter({
+            //hash는 디폴트, 생략가능 
+            // mode : 'hash'
+
+            // 중요한건 routes속성 : 경로와 컴포넌트 매핑시킴 
+            routes: [{
+                    path: '/main',
+                    component: mainComponent
+                },
+                {
+                    path: '/info',
+                    component: infoComponent
+                },
+                {
+                    /*
+                    path : '/user/:id',
+                        //:id는 == .$route가 가지는 -> .params에 담김 -> .id해당아이디 가져옴 
+                        //'/user/:id/pwd/:pwd 요런식으로도 가능, :이 붙는경우 값으로 받겠다는 의미 
+                    component : {
+                        template : `<div> User {{ this.$route.params.id }} </div>`
+                        //실행 : http://127.0.0.1:5500/vue03/router01.html#/user/700 경로에 검색
+                    
+                        */
+                    path: '/user/:id/pwd/:pwd',
+                    component: {
+                        template: `<div> User {{ this.$route.params.id }} <br>
+                                            비밀번호 {{this.$route.params.pwd }}
+                                            </div>`
+                        // http://127.0.0.1:5500/vue03/router01.html#/user/9979/pwd/1234 실행 
+
+                    }
+                }
+            ]
+        });
+
+        new Vue({
+            el: '#app',
+            router: router
+        });
+    </script>
+
+
+
+
+    <!-- app2 -->
+    <div id="app2">
+        <!-- tag는 <a>태그가 디폴트, 다른거 쓰려면 지정해주면 됨 -->
+        <!-- link경로를 받아올건데,  v-bind:to를 이용해서 경로가아니라 해당 라우터를 호출하는 값을 호출하겠다.  -->
+        <!-- 즉, <router-link tag="button" to="/users/jiniBack">User</router-link>이렇게 원래 해줘야하는데 불편. -->
+        <router-link tag="button" v-bind:to="{name : 'user',
+                                            params : {username : 'jiniBack'} }">
+            User
+        </router-link>
+        <router-view></router-view>
+    </div>
+    <script>
+        const vueRouter = new VueRouter({
+                mode: 'history',
+                    /*
+                    hash : '#' + '경로' -> server에 요청을 보내지 않고 이동 (default)
+                    history : '#'을 제외하고 SPA 구현하기 위한 모드, history API 
+                              (현재를 기준, 앞 뒤로 가는거, 마치 서버를 왔다갔다 하듯 보이게 함 . 윈도우가 가지는거 나도사용가능)
+                    */
+                routes: [{
+                path: '/users/:username', //경로 ( /users/:username == 호출시 username검색 )
+                name: 'user', //호출
+                component: {
+                    template: `<div>
+                                    <p> 유저 정보 : {{ username }} </p>
+                                </div>`,
+                    props: ['username']
+                },
+                props: true
+                //props를 true로 주면 외부(경로?)에서 받아오는 값을 쓰겠습니다~ 는거. 
+                ///users/:username' 지금 처럼 보내야하는 이름,값이 있는경우. -> v-bind:to에 name,params으로 정해줌
+
+            }]
+        });
+
+        new Vue({
+            el: '#app2',
+            router: vueRouter,
+            methods : {
+                changeURL : function(){
+                    if(){
+                        this.$router.push({name : 'user',
+                                            params : {username : 'jiniBack'} });
+                    }else {
+                        this.$router.push()
+
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

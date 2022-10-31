@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <!-- CDN -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+</head>
+<body>
+    <!-- 태그 이벤트 등록 -->
+    <button type="button" id="btn">버튼</button>
+    <script>
+        //단일 이벤트 등록
+        // 1)on  | 2)이벤트에 대응되는 메소드
+            /*
+            // 1)
+            //click=매서드(이벤트) , function(매개변수) = 이벤트핸들러
+            $('#btn').on('click', function(){
+                $('body').append('<p>on 단일 이벤트 등록</p>'); // = js , addeventLis~
+            });
+
+            //2)
+            $('#btn').click(function(){
+                $('body').append('<p>on 단일 이벤트 등록<br>(메소드를 통해 등록)</p>'); // = js , addeventLis~
+            });
+            */
+
+
+
+        //그룹 이벤트 등록 -> 여러 이벤트를 동시에 등록 : on
+            // $('#btn').on('click mouseover', function(){
+            //     $('body').append('<p>그룹 이벤트 등록 : 동일한 핸들러 </p>');
+            // })
+
+        // 그룹이벤트 개별 동작
+            $('#btn').on({
+                "click" : function(){ alert("그룹 이벤트로 click 이벤트 등록") },
+                "mouseover" : function(){ $('body').append('<p> 그룹 이벤트로 등록 </p>')}
+            });
+
+        
+    </script>
+</body>
+</html>

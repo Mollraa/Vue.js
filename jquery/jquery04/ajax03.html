@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <!-- 조회 -->
+    <div>
+        <label for="empId">사원번호</label>
+        <input type="number" name="employee_id" id="empId">
+        <button type="button" id="selectBtn">조회</button>
+    </div>
+
+    <!-- update form -->
+    <form id="info" action="#" onsubmit="return false">
+        <!-- onsubmit="return false" = form이 가진 통신기능 먹통됨 -->
+        <div>
+            <button type="button" id="updateBtn">수정</button>
+            <button type="button" id="deleteBtn">삭제</button>
+        </div>
+        <div>
+            <label for="id">사원번호</label>
+            <input type="number" id="employee_id" name="employee_id" readonly>
+        </div>
+        <div>
+            <label for="last_name">성</label>
+            <input type="text" id="last_name" name="last_name">
+        </div>
+        <div>
+            <label for="first_name">이름</label>
+            <input type="text" name="first_name" id="first_name">
+        </div>
+        <div>
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email">
+        </div>
+        <div>
+            <label for="job_id">직업</label>
+            <input type="text" id="job_id" name="job_id">
+        </div>
+        <button type="submit" id="submit">등록</button>
+    </form>
+
+    <script>
+        // 요즘엔 조회 빼고 거의다 POST
+        $(document).ready(function () {
+            $('#selectBtn').click(selectEmployee);
+            $('#updateBtn').click(updateEmployee);
+            $('#deleteBtn').click(deleteEmployee);
+        })
+
+        function selectEmployee() {
+            /*
+            url : http://192.168.0.2:8081/myserver/empFind
+            type : get
+            parameter : employee_id
+            */
+
+            //get 방식
+            // $.ajax({
+            //     url : 'http://192.168.0.2:8081/myserver/empFind',
+            //     // type : 'get', //get방식 안적어 줘도 됨
+            //     data : { "employee_id" : $('#empId').val() }, //data가 가지는 기본값이 객체타입
+            //     success : function(data){
+            //         // console.log(typeof data, data);
+            //         $('#emplyee_id').val(data.employee_id); // ->해당 속성의 id를 다 알고 있어야함(불편...)
+            //     },
+            //     error : function(reject){
+            // console.log(reject);
+            //     }
+            // });
+
+            //get 방식 = 데이터들을 쿼리로 만들어서 post로 보냄 <-> post = 링크로 보냄
+            $.ajax({
+                // url: 'http://192.168.0.2:8081/myserver/empFind?employee_id='+ $('#empId').val(), //-> 하나 보낼때 사용
+                url : 'http://192.168.0.2:8081/myserver/empFind',            
+                data: {
+                    "employee_id": $('#empId').val()
+                },
+                success: function (data) {
+                    for(let field in data){
+                        // # + employee_id = #employee_id
+                        let selector = '#'+field;
+                        $(selector).val(data[field]);
+
+                    // => 문자타입으로 값이 넘어가는 걸 응용한것. 전제조건만 성립되면 좀 더 간편하게 데이터를 집어넣을 수 잇음
+                    }
+                },
+                error: function (reject) {
+                    console.log(reject);
+                }
+            });
+
+        }
+
+        function updateEmployee() {
+            /*
+             url : http://192.168.0.2:8081/myserver/empUpdate
+             type : post
+             parameter : employees 테이블의 모든 컬럼
+                         (employee_id(pk), first_name, last_name, email) = 넘길 값
+             */
+
+             $.ajax({
+                url : 'http://192.168.0.2:8081/myserver/empUpdate',
+                type : 'post',
+                data : $('#info').serialize(), //->태그정보는 못읽음 => 우리가 필요한 정보만 묶어서 보내기
+                // serialize() -> name1=value1&name2=value2&name3=value3&... (name1=value1& 한 세트로 묶어서 보냄)
+                /*
+                // deflat contenttype으로 간단한 데이터 전송 할 떄
+                data : {
+                    "employee_id" : $('#emplyee_id').val(),
+                    "first_name" : $('#first_name').val()
+                }
+                */
+                success : function(data){
+                    if(data != null){
+                        alert("수정 완료!");
+                    }
+                },
+                error : function(reject){
+                    console.log(reject);
+                }
+            });
+        }
+
+        function deleteEmployee() {
+            /*
+            url : http://192.168.0.2:8081/myserver/empDelete
+            type : post
+            parameter : employee_id
+            */
+
+            $.ajax({
+                url : 'http://192.168.0.2:8081/myserver/empDelete',
+                type : 'post',
+                data : {"employee_id": $('#employee_id').val()},
+                success : function(data){
+                    console.log(data);   
+                },
+                error : function(reject){
+                    console.log(reject);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 2.x.snippent: 버전-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <!-- CDM방식 : 학습, 연습시 사용.. 링크를 이용, 배포할때 안씀... 내가 코드를 들고있지 않아서, 
+                코드를 가진 곳에서 수정삭제하면 내꺼에 문제 생기고, 신기술이라 업데이트도 자주함
+                => 현업: 코드를 다 다운받고 작성. -->
+                <!-- 동일한 코드라도 버전에 다름.. 다운받을 때 조심조심.. 되다가 안되면 공홈고고 = 영어랑 친하게 지내기^^ -->
+</head>
+<body>
+    <!-- 내가한 방법 -->
+    <!-- <h1 id="title" style="color: rgb(255, 28, 141); background-color: rgb(203, 255, 238);">제목</h1> -->
+    <h1 id="title">제목</h1>
+
+    <script>
+        // 교수님 자스로 스타일주기 답안.
+        // // 자바스트립트로 스타일 주기 start
+        // let jsTag = document.getElementById('title');
+        // jsTag.style.color = 'blue';
+        // // 자스 스타일 end
+
+
+        //제이쿼리로 스타일주기 start
+        let jqTag = jQuery('#title'); //# = id속성. 가져옴
+        jqTag.css('color', 'pink');
+        //title이라는 아이디로, 객체를 생성, 객체를 기반으로 움직임
+        //css = 제어메서드, end
+    </script>
+</body>
+</html>

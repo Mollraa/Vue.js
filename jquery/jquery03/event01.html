@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+</head>
+<body>
+    <p>
+        <!-- https://place-hold.it/ 이미지 제공 사이트 -->
+        <img src="http://place-hold.it/300X300" class="img1">
+    </p>
+    <script>
+    // ready , load
+        //ready -> html 문서 로딩이 완료된 후에 동작 (html 파싱 후 존재 유무는 나중)
+            //document = DOM
+            $(document).ready(function(){
+                let h1 = $('.img1').height();
+                console.log('ready : ', h1);
+            });
+
+        //load -> 외부에 연동된 코드(iframe, img, viedo)의 로딩이 완료된 후에 동작
+            //window = 브라우저(최상) -> 각각의 DOM (하위 DOM)
+            //통신은 결국 브라우저가 함. 돔은 메모리상 데이터를 끌어올리는 것 뿐 -> 브라우저에서 제어해야 할 때, window(전역변수)로 
+            // 근데 3버전에서 사용불가 .. ready만 기억하장 ㅎ   
+            $(window).on('load', function(){
+                let h2 = $('.img1').height();
+                console.log('load : ', h2);
+            });
+    </script>
+</body>
+</html>

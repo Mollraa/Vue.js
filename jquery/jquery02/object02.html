@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <!-- 태그추가 -->
+    <div id="ex01">
+        <p>내용1</p>
+        <p>내용2</p>
+        <p>내용3</p>
+    </div>
+
+    <script>
+        //지정한 태그 이전 새 태그를 추가 : before(), insertBefore()
+        // -> 기준을 정해서 하나를 쓰쟈
+        $('#ex01 p:eq(1)').before('<p>Before추가</p>');
+        $('<p id="text"> insertBefore 추추가</p>').insertBefore('#ex01 p:eq(1)');
+
+
+        //지정한 태그 이후 새 태그를 추가 : after(), insertAfter()
+        $('#ex01 P:last').after('<p>after 추가추가</p>');
+        $('<p> 추 insertAfter 가</p>').insertAfter('#ex01 p:eq(1)');     
+        // insertAfter = text() 들어가는 위치는 지정인데 속성이 더 들어갈때
+        // after = next().Children() 더 들어가는 느낌 
+    </script>
+
+    <div id="ex02">
+        <ul id="listZone">
+            <li>리스트</li>
+        </ul>
+    </div>
+    <script>
+        //append(), appendTo(), prepend(), prepandTo() 4개중 하나라도 정확하게 알고 활용
+        // 맨 마지막 추가 : append(), appendTo() - 나를 중심으로작동
+        $('#listZone').append('<li>append</li>');
+        $('<li>appendTo()</li>').appendTo('#listZone');
+
+        //맨 앞 추가 : prepend(), prepandTo() - 그냥 맨앞에 꾸겨넣기
+        $('#listZone').prepend('<li>preappend</li>');
+        $('<li>prepandTo</li>').prependTo('#listZone');
+        $('#listZone').prepend('<li>preappend2</li>');
+    </script>
+    <!-- 태그추가 end -->
+
+
+
+    <!-- 태그 복사 -->
+    <div id="ex03">
+        <div class="box1">
+            <p>내용1</p>
+            <p>내용2</p>
+        </div>
+        <div class="box2">
+            <p>내용3</p>
+            <p>내용4</p>
+        </div>
+        <div class="box3">
+            <p>내용5</p>
+            <p>내용6</p>
+        </div>
+    </div>
+    <script>
+        //clone() -> 태그 복사, 이벤트를 함께 복사
+        let copyObj = $('#ex03 .box1').children().clone();
+        $('#ex03 .box3').append(copyObj);
+
+        //empty() -> 태그의 하위 요소를 모두 삭제(내부에 있는 것만 삭제)
+        $('#ex03 .box3').empty();
+        
+        //remove() -> 해당 태그를 삭제(해당 태그 삭제)
+        $('#ex03 .box2').remove();
+    </script>
+    <!-- 태그 복사 end-->
+
+
+    <!-- 태그 대체 -->
+    <div id="ex04">
+        <section class="box1">
+            <h2>제목1</h2>
+            <div>내용1</div>
+            <div>내용2</div>
+        </section>
+        <section class="box2">
+            <h2>제목2</h2>
+            <div>내용3</div>
+            <div>내용4</div>
+        </section>
+    </div>
+    <script>
+        //기존 태그 중 지정한 태그를 원하는 태그로 대체
+        //replaceAll()
+        $('<p>Change</p>').replaceAll('#ex04 .box1 div'); //복수 각각 적용
+
+        //replaceWith()
+        $('#ex04 h2').replaceWith('<h3> replace method</h3>');
+
+    </script>
+    <!-- 태그 대체 end-->
+
+</body>
+
+</html>

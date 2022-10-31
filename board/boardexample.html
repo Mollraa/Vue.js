@@ -105,6 +105,10 @@
                     loadData: function (event) { //파일을 읽어들이는 메소드 
                         // event객체 -> 파일 정보를 어떻게 읽어들일지
                         let file = event.target.files[0].name;
+                        /*
+                        files[0] = file은 복수로 들어올수 있는데, 1개파일 처리해주려면index[0]은 (위치,이름,파일,확장자)
+                        무조건 값이 들어있으니까 그걸 단건으로 들고오겠다는 의미, -> if ajax fetct로 그 파일의 내용들 가져옴
+                        */
                         console.log(file);
 
                         /*

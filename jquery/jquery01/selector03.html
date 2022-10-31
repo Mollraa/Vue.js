@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <div id="inner_wrap">
+            <h1>제목1</h1>
+            <h2>제목2</h2>
+            <h3>제목3</h3>
+            <p>내용</p>
+            <div>
+                <h1>하위 요소1</h1>
+                <h2>하위 요소2</h2>
+            </div>
+        </div>
+    </div>
+    <script>
+    //관계기반 선택자 start
+
+        //부모 선택자 | parents - 관계를 기반으로 위에서 찾아옴
+            //parents - 조상(상위 모든태그) , parent - 부모
+            //$('#inner_wrap').parents().css('border', '1px solid black');
+            $('#inner_wrap').parent().css('border', '1px solid #DA55FE');
+
+
+        //하위 요소 선택자 | , - 내가 감싸고 있는 모든요소들 중에서 골라옴 <-> 자식: 내 바로 및
+            //$('#wrap h1 h2').css('color', 'pink'); - ,빼면 적용안되는 이유? h1이가지는 요소중에 h2를 찾음, 한번더 들어감.
+            $('#wrap h1, h2').css('color', 'pink');
+
+
+        //자식 요소 선택자 | >,children()
+            //1번째 방법 - 기준 정하고 >로 지정. (selector를 이용한 방식)
+            $('#inner_wrap > h1').text('자식 요소로 선택');
+
+            //2. 
+            //children() - 보통자식태그는 복수, 기준이 되는 거에서 다들고옴
+            //children('h2') - 다 안들고 오고 기준을 걸어줌
+            $('#inner_wrap').children('h2').text('children() 함수사용');
+            
+            $('div > h1').css('color', 'yellow'); //id속성만 이용(되도록 안쓰는게 좋음)
+
+    //관계기반 선택자 end
+    </script>
+
+
+
+    <!-- 동급적근 = 이전 이후 start -->
+    <div id="content">
+        <h1>인접 관계 선택자</h1>
+        <p>내용1</p>
+        <p class="txt">내용</p>
+        <p>내용3</p>
+        <p>내용4</p>
+        <span>추가한 내용</span>
+    </div>
+
+    <script>
+    //형 start
+        //형(이전) 요소 선택자 | prev() - 만족하는()를 다 골라골라. 바로 앞의 요소에 대해서만 해당
+        $('.txt').prev().css('background-color', '#0ff')
+                        .css('border', '2px solid #f00');
+
+        $('.txt').prev().text('이전 요소들'); //개별적 처리하고 싶으면 - 변수에 담아서 for문으로 접근해 바꿔주면 됨
+            //prevAll() - 만족하는()를 다 골라골라. 내 앞의 모든요소들
+
+        $('.txt').prevUntil('h1').css('border', '10px solid pink');
+        // prevUntil() - ()안 요소의 앞까지. | 실습 - h1태그 앞에서 끝남.
+    //형end
+
+
+
+    //동생 start
+        //동생(이후) 요소 선택자
+        //next().next() + prev() or prev() 이런식으로 조합가능 = 복합적으로 쭉 나열해서 검색가능
+        $('.txt').next().next().css('color', 'red');
+        $('.txt').nextAll().text('다음 요소들');
+
+        // (+) - ex)내 다음거 중에 p태그에 접근하고 싶다. 
+        $('.txt + p').text('선택'); //다음 요소들 덮어써짐
+
+        //nextUntil() - 범위제한 걸기, 해당 되는 조건을 만족하지 않고 그 앞까지
+        $('.txt').nextUntil('span').css('border', '10px solid skyblue');
+    //동생 end
+    </script>
+
+
+
+    <!-- 형제 start -->
+    <!-- 형제는 주로 본인 제외한다고 보면 됨당 -->
+    <div>
+        <h1 class="title">선택자</h1>
+        <section>
+            <div>
+                <p class="txt1">내용</p>
+            </div>
+        </section>
+        <section>
+            <div>
+                <p class="txt2">내용</p>
+            </div>
+        </section>
+    </div>
+    <script>
+    //상위 요소 선택자
+        //직접 적으로 관련있는 조상태그 선택자 = parents()
+        $('.txt2').parents('section').css('border', '3px solid red');
+        //$('.txt2').parents('div').css('border', '3px solid red');
+
+        
+        //가장 가까운 상위 요소 선택자 = closest()
+        $('.txt1').closest('div').css('border', '2px solid blue');
+
+        //전체 형재요소 선택자(나와 동급, 나 제외) = siblings()
+        $('h1').siblings().css('background-color', '#DDA3F6');
+
+    </script>
+    <!-- 형제 end -->
+
+</body>
+</html>

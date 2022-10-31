@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+</head>
+<body>
+    <div id="outer_wrap">
+        <h1>콘텐츠 탐색 선택자</h1>
+        <section id="inner_1">
+            <h1>containts(), has()</h1>
+            <p>
+                <span>내용1</span>
+            </p>
+            <p>
+                내용 추가<br>
+                <strong>내용2</strong>
+            </p>
+            <p>
+                <span>내용3</span>
+            </p>
+        </section>
+        <section id="inner_2">
+            <h1>not()</h1>
+            <p>내용4</p>
+            <p>내용5</p>
+            <p>내용6</p>
+        </section>
+    </div>
+    <script>
+    //태그 start
+        //태그가 가지고 있는 텍스트를 검색 -> contains()
+            //해당 엘리먼트리를 꺼내서 값을 확인하고자..?하는의미
+            //내가 포함하는 모든 요소들안에 있으면 다 같이 적용됨..?
+        $('#inner_1 p:contains("내용1")').css('background-color', '#F76CF9');
+        $('#inner_1 p:contains("추가")').css('background-color', '#F76CF9');
+
+
+        //검색하고자 하는 태그를 포함하고 있는 태그를 선별 -> has()
+            //ex) strong이 있는 애들만 골라내서 스타일을 주고싶다
+            $('#inner_1 P:has(strong)').css('border', '10px solid pink');
+
+
+        //검색조건 중 제외하고 자 하는 것을 지정 -> not()
+        //가지고 있는거 중에 뭐를 원하는지..?를 지정하는 의미 
+            //p태그를 가져오고 싶은데 1번째는 제외하고 가져오고싶다.
+            $('#inner_2 p:not(:first)').css('color', 'blue');
+            //마지막꺼 제외
+            $('#inner_2 p').not(':last').css('background-color', 'red');
+    //태그end
+    </script>
+    
+
+
+
+
+
+    <div id="outer_content">
+        <h1>콘텐츠 탐색 선택자</h1>
+        <section id="in_1">
+            <h2>find(), filter()</h2>
+            <p class="txt1">내용1</p>
+            <p class="txt2">내용2</p>
+        </section>
+        <section id="in_2">
+            <h2>filter(function)</h2>
+            <p>index 0</p>
+            <p>index 1</p>
+            <p>index 2</p>
+            <p>index 3</p>
+        </section>
+        <script>
+        //find, filter start
+            
+            //find() -> 하위 요소 중에서 검색
+            $('#in_1').find('.txt1').css('background-color', 'pink');
+            $('#in_1 .txt1').text('하위요소');
+                //-> 둘다 같은 의미
+
+            //filter() -> 선택된 요소 중에서 검색
+            $('#in_1 p').filter('.txt2').css('background-color', 'orange');
+
+            //index가 가지고 있는 수를 잘라내서 2의 배수인 것만 적용
+            $('#in_2 p').filter(function(index, element){
+                //function, elemnet = 매개변수..?
+                console.log(index, element);
+                
+                let idx = element.textContent.slice(6, 7);
+                return idx % 3 == 0;
+                //return = 걸러내는 기준
+            }).css('color', 'red');
+
+        //find, filter end
+        </script>
+    </div>
+</body>
+</html>

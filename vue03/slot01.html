@@ -44,8 +44,10 @@
         </my-component>
     </div>
     <script>
+        // 지정슬롯 : 위에서 넘겨주는 이벤트에 대해서 부모컴포넌트에 이름을 줘서 쓰게함.
+        //          부모컴포넌트는 내가 얘(?)를 슬롯에 넣어주는게 얘가 어떤걸 의미하는지, 뷰에서 자체적으로 사용하려고 만든거 
         const component = {
-            template : `<div>
+            template: `<div>
                 <slot name="header"></slot>
                 <br>
                 <h1>컴포넌트 데이터입니다. </h1>
@@ -53,19 +55,146 @@
                 <br>
                 <slot name="footer"></slot>
                 </div>`,
-            props : ['text']
+            props: ['text']
         }
 
         new Vue({
-            el : '#app',
-            data : {
-                message : ''
+            el: '#app',
+            data: {
+                message: ''
             },
-            components : {
-                'my-component' : component
+            components: {
+                'my-component': component
             }
         })
     </script>
+
+
+    <hr>
+    <!-- 복합table start -->
+    <div id="app2">
+        <!--
+            <form-component v-bind:author="authorLable" 
+            v-bind:title="titleLable">
+            <h1>{{ header }}</h1>
+        </form-component>
+        -->
+        <form-component>
+            <h1>{{ header }}</h1>
+            <!--익명으로 주면 -> <slot></slot> 이리로 들어가고 -->
+
+            <!-- 이름있는 애들은 이름따라 감 -->
+            <label for="title" slot="titleSlot">{{titleLabel}}</label>
+            <label for="author" slot="authorSlot">{{authorLable}}</label>
+            <!-- 기능상 차이는 크게 없고, 자식 컴포넌트가 유연하게 대체가능
+                부모가 보내는 컨텐츠가 뭐냐에 따라 다양한 데이터 보여줄 수 있음.-->
+        </form-component>
+    </div>
+    <script>
+        const formComponent = {
+            template: `<div>
+                            <form>
+                                <slot></slot>
+                                <!-- <label for="title">{{title}}</lable> -->
+                                <slot name="titleSlot"></slot>
+                                <input id="title" type="text"><br>
+
+                               <!-- <lable for="author">{{author}}</lable> -->
+                               <slot name="authorSlot"></slot>
+                                <input id="author" type="text"><br>
+                                <button>제출하기</button>
+                            </form>
+                        </div>`
+            // props : ['title', 'author']
+        }
+
+        new Vue({
+            el: '#app2',
+            data: {
+                titleLabel: '제목 : ',
+                authorLable: '저자 : ',
+                header: '책 저자 폼'
+            },
+
+            components: {
+                'form-component': formComponent
+            }
+        });
+    </script>
+    <!-- 복합table end -->
+
+
+
+
+
+    <!-- 범위슬롯 start -->
+    <!-- 교수님 : 어렵어렵 잘 따라와야함 -->
+    <hr>
+    <div id="app3">
+        <!-- props : 부모가 넘겨주는게 존재 한다는 뜻 -->
+        <book-component v-bind:book-list="books">
+            <h1 slot="header">{{header}}</h1>
+            <!-- for : 뭔가를 반복할건데,  template에 i,samll이 slot="book"으로 대체-->
+            <template slot="book" slot-scope="data">
+                <!-- slot-scope: 컴포넌트가 가지는걸 다시 부모가 받아옴(즉 북스 말고 북리스트를 가져온다),
+                     부모가 가지는 books가 아니라 props이 가지는 bookList를 쓰겠다. 
+                    즉... <slot name="book"
+                            v-for="book in bookList"
+                            v-bind:text="book">
+                    </slot> 가 가지는 바인딩 텍스트값을 가져오겠다. -->
+                <h2>
+                    <i> {{data.text.title}} </i>
+                    <!-- v-for="book == v-bind:text(연결고리역할)="book"의 title을 가져오겠다. -->
+                    <small> {{data.text.author}} </small>
+                </h2>
+            </template>
+        </book-component>
+        <!-- 정리 : 
+            1. bookList에 용량대로 -> slot생성 -> data로 들어감 
+           =>  2. data를 어떻게 보여줄지를 부모가 결정
+                    <h2>
+                        <i> {{data.text.title}} </i>
+                        <small> {{data.text.author}} </small>
+                    </h2>
+                -->
+    </div>
+    <script>
+        const bookComponent = {
+            template: `<div>
+                    <slot name="header"></slot>
+                    <slot name="book"
+                            v-for="book in bookList"
+                            v-bind:text="book">
+                            <!-- v-for="book = v-bind:text="book"-->
+                    </slot>
+                </div>`,
+            props: ['bookList']
+        }
+
+        new Vue({
+            el: '#app3',
+            data: {
+                header: '책 제목',
+                books: [{
+                        author: 'John Smith ',
+                        title: 'Best of Times -'
+                    },
+                    {
+                        author: 'Jane Doe',
+                        title: 'Go West Young Man -'
+                    },
+                    {
+                        author: 'Avery Katz',
+                        title: 'The Life And Times of Avery -'
+                    },
+                ]
+            },
+            components: {
+                'book-component': bookComponent
+            }
+        })
+    </script>
+    <!-- 범위슬롯 end -->
 </body>
 
 </html>

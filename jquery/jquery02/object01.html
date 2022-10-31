@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    <style>
+        .aqua{background-color: aqua;}
+        .red{background-color: red;}
+        .green{background-color: green;}
+        .yellow{background-color: yellow;}
+    </style>
+</head>
+<body>
+    <!-- 태그자체 조작 start -->
+    <!-- html <-> text -->
+    <div id="ex01">
+        <h1>
+            <strong>객체 조작 및 생성</strong>
+        </h1>
+        <section id="sec_1">
+            <h2>
+                <em>html()</em>
+            </h2>
+            <p>내용1</p>
+        </section>
+        <section id="sec_2">
+            <h2>
+                <em>text()</em>
+            </h2>
+            <p>내용2</p>
+        </section>
+    </div>
+    <script>
+        //html()
+        //html() -> 태그의 모든 하위요소를 가져와서 문자열로 반환
+        // 범위를 명확하게 잡아주기(덮어쓰기 때문)
+        let result = $('#sec_1').html();
+        console.log(result);
+
+        //하위 태그 1개에 속성바꾸기
+        // $('#sec_1 p').html('<a href="#"> text1 </a>');
+        $('#sec_1').html('<a href="#"> text1 </a>');
+
+
+
+        //text()
+        //text() -> 태그의 모든 텍스트 반환(하위 요소의 텍스트 포함)
+        // 범위를 명확하게 잡아주기(덮어쓰기 때문)
+        let reuslt2 = $('#sec_2').text();
+        console.log(reuslt2);
+
+        //하위 태그 1개에 속성바꾸기
+        // $('#sec_2 p').text('<a href="#"> text2 </a>');
+        $('#sec_2').text('<a href="#"> text2 </a>');
+
+
+        //val()
+
+        //css() -> style 속성
+        // 사용법ex) css('color', 'red'); | css({ "color" : "red", "background-color" : "skyblue"})
+    </script>
+
+
+
+
+    <!-- 클래스속성 다루기 -->
+    <div id="ex02">
+        <p id="p1">내용1</p>
+        <p id="p2" class="red">내용2</p>
+        <p id="p3">내용3</p>
+        <p id="p4" class="green">내용4</p>
+        <p id="p5" class="yellow">내용5</p>
+        <p id="p6"></p>
+    </div>
+    <script>
+        //class 속성 : 복수의 값(값이면서 이름)
+        //ex) 부트스트랩 - class로 먹이는거랑 비슷
+
+        //1) addClass() -> class 속성에 지정한 값을 추가
+        $('#p1').addClass('aqua'); //값이라서 리터럴로 추가가능
+
+        //2) removeClass() -> class 속성에 해당 값을 삭제(클래스속성 삭제 아님)
+        $('#p2').removeClass('red');
+        // <p id="p2" class="red">내용2</p> X -> <p id="p2" class>내용2</p> O
+
+        //3) toggleClass() -> class 속성에 해당 값이 존재하면 삭제, 없으면 생성
+        // 현재 상태에 따라 반대로 바꿈
+        $('#p3').toggleClass('green');
+        $('#p4').toggleClass('green');
+
+        //4) hasClass() -> class 속성에 해당 값이 존재하는 유무 확인
+        let resutl3 = $('#p4').hasClass('yellow');
+        $('#p6').text(resutl3);
+    </script>
+
+
+
+    <!-- 태그제어 -->
+    <div id="ex03">
+        <h1>
+            <strong>객체 조작 및 생성</strong>
+        </h1>
+        <section id="sec01">
+            <h2>
+                <img src="3.jpg" alt="이미지" border="2">
+            </h2>
+        </section>
+        <a id="get_comment" href="#comments">코멘트</a>
+    </div>
+
+    <!-- method란? -->
+    <script>
+        /*
+        //attr() -> html의 attribute를 조작(정적)
+        let var1 = $('#sec01 img').attr('src');
+        console.log(var1);
+
+        $('#sec01 img').attr('width', 200);
+        $('#sec01 img').attr({
+            "alt" : "카드",
+            "height" : 300
+        });
+
+        $('#sec01 img').removeAttr('src'); //복수의 값을 가지지 않아서 개별적 삭제가능
+        */
+
+
+        //prop() -> DOM의 property를 조작(동적)
+        let var1 = $('#sec01 img').prop('src');
+        console.log(var1);
+
+        $('#sec01 img').prop('width', 200);
+        // $('#sec01 img').removeProp('width'); //원본이 있는 상태에서 날리기 어려움.. 왠만하면 prop로 제어하기
+
+        console.log('==================');
+        console.log('attr : ', $('#get_comment').attr('href'));
+        console.log('prop : ', $('#get_comment').prop('href'));
+
+    </script>
+
+
+
+    <!--  -->
+    <div id="ex04">
+        <form action="#" id="form_1">
+            <div>
+                <label for="chk1">체크1</label>
+                <input type="checkbox" name="chk1" id="chk1">
+                <label for="chk2">체크2</label>
+                <input type="checkbox" name="chk2" id="chk2" checked>
+                <label for="chk3">체크3</label>
+                <input type="checkbox" name="chk3" id="chk3">
+            </div>
+            <div>
+                <select name="select_1" id="select_1">
+                    <option value="opt1">옵션1</option>
+                    <option value="opt2">옵션2</option>
+                    <option value="opt3" selected>옵션3</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <script>
+        $('#chk2').prop('checked',false);
+        //prop.ver
+        let checkVal = $('#chk2').prop('checked');
+        console.log('prop : ', checkVal);
+
+        //attr.ver
+        // let checkVal = $('#chk2').attr('checked');
+        // console.log('attr : ', checkVal);
+
+
+        let selectVal = $('#select_1').prop('selectedIndex');
+        console.log(selectVal);
+
+    </script>
+</body>
+</html>

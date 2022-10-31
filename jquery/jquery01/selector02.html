@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CDM페이지마다 달아줘야함, script코드라 title에 달아주는게 best,
+        body및 이나 다른곳에 달면 컴파일하다가 인식 못 할 수 있음 -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
+
+</head>
+
+<body>
+    <h1 id="title">제목제목</h1>
+    <!--DOMContentLoaded start  -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            let jqTag = jQuery('#title');
+            jqTag.css('color', 'salmon');
+            
+        })
+    </script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
+    <!-- DOMContentLoaded end || DOMContentLoaded =>이 이벤트가 실행되고 나면 실행해라~ 는 의미. 가끔 있을 수 있는 경우.. -->
+
+    <!-- title에서 선언하는 경우 start -->
+    <!-- <script>
+            let jqTag = jQuery('#title');
+            jqTag.css('color', 'salmon');
+    </script> -->
+    <!-- title에서 선언하는 경우 end -->
+
+    <!-- 본격실습 start -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    <script>
+        // javascript의 언어적 특성 짚고 넘어가기 start (순차적언어의 특성)
+        // jQuery(document).ready(function(){
+        //     let testTag = jQuery('.blue');
+        //     testTag.css('background-color', 'pink');
+        // });
+        //javascript의 언어적 특성 짚고 넘어가기 end
+
+
+        //jQuery start / jQuery = $
+        // jQuery로 감싸고, ready라는 이벤트를 걸어줌. ->dom트리가 완성되면 이벤트를 실행시켜준다는 의미
+            $(document).ready(function () {
+            //직접선택자 start - Node가 가지고 있는 속성들
+
+                //전체선택자 : ↓
+                $('*').css('border', '1px solid red');
+                //$('*') = html header body.. DOM의 모든 속성에 적용
+
+                //아이디 선택자 : ↓
+                $('h2#title').css('background-color', 'gray')
+                    .css('border', '2px solid yellow')
+                //# - id , id는 유니크 값이라고 생각해. 무조건 첫번째 id에 달림.
+                //h2 - 위에 id title이 있어서 일부러 지정해줌.
+
+                //클래스 선택자 : ↓
+                let classTag = $('.blue');
+
+                //Nodjs는 자스영역^^ <-> classTag는 jQuery꺼 담아주는 역할
+                //Nodjs를 쓰고 싶으면 jQuery로 감싸줘야한다. -> 감싸주고 호출하기.. 기억해
+                for (let i = 0; i < classTag.length; i++) {
+                    classTag[i].textContent += i;
+                     //$(classTag[i]).css('color', 'pink');
+                }
+
+                classTag.text('클래스 선택자'); //클래스 전체적용
+
+
+                //태그 선택자 : 태그 기반으로 다시변경, 복수태그로 들어오는 경우 = 개별로 처리
+                $('h3').text('직접 선택자로 다시 변경');
+
+
+                //그룹 선택자 : ,로 각각의 속성에 만족하는 태그들 불러옴.
+                // ※ 콤마로 불러오지 않으면 하위요소로 들어감. 
+                $('#title, .blue, h4').css('color', 'blue');
+
+
+                //종속 선택자 : 해당태그를 검색하되, 태그의 속성을 입력
+                //  태그,그룹 보다 디테일함 -> 속성과 태그사이에 공백없이 닷입력.
+                $('h1.blue').text('종속 선택자로 선택');
+
+            //직접선택자 end
+
+        });
+    </script>
+
+    <h1 class="blue">제이쿼리</h1>
+    <h2 id="title">선택자</h2>
+    <h3 class="blue">직접선택자</h3>
+    <h4>그룹 선택자</h4>
+
+
+    <!-- 본격실습 end -->
+</body>
+
+</html>

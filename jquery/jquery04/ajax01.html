@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+</head>
+<body>
+    <script>
+
+        /*
+        ajax 비동기 통신 객체 - 자주 사용하는 객체
+            $ajax({
+                // 접속할 주소
+                    url : ,
+
+                // 데이터를 전송하는 방식(get, post)
+                    type : ,
+
+                // 전송할 데이터
+                    data : ,
+
+                // 전송할 데이터 content-type : application/x-www-form-urlencoded
+                    contentType : , (내가 전송할 데이터를 컨텐트타입으로 정의)
+
+                // 리턴되는 데이터 타입
+                    dataType : ,(서버에서 보내주는 데이터 타입)
+
+                // 전송에 성공했을 경우 (매개변수로 들어오는게 서버에서 보낸거)
+                // 오류 : 콘솔에 먼저 찍어보기, 무조건 동기로 받는 서버도 있음, 파싱해야 하는지, 배열인지 오브젝트인지 확인
+                    success : function(data){
+
+                    },
+
+                // 전송에 실패했을 경우 (매우중요☆. 생략X, 꼭 적어주기 : 안적으면 에러에 대한 정보 못받음)
+                    error : function(reject){
+                        console.log(reject);
+                    }
+
+                //async : false(비동기식,deflat) -> ture(동기식) | 비동기 아작스를 동기식으로 바꿔줌
+                //beforesend : function(){
+                    //보내기전에 마지막으로 확인 하는 것들, 같이 보내야하는 것들 사용.
+                    // ex ) cors , 주로 토큰(내가 만든 페이지 에서만 나에게 데이터를 요청하게, 해킹방지)
+                }
+            })
+        */
+    </script>
+
+<div id="content"></div>
+<script>
+        //json간단 test
+            // fetch('MOCK_DATA.json')
+            //     .then(response => response.json())
+            //     .then((data) => console.log(data));
+
+
+        // ajax로 처리
+        // 이벤트는 어디걸어주면 좋을까? 
+        $.ajax({
+            //url - 읽고자 하는 파일명, 파일경로 등 가능
+            // url : 'MOCK_DATA.json',
+            url : 'http://192.168.0.2:8081/myserver/empSelect', //단순 조회라서 주소입력가능
+            dataType : 'json',
+            success : function(data){
+                console.log(data);
+
+            //data -> [{},{},{}, ... ]
+            //배열기반 테이블 생성 - jquery
+                //테이블 생성
+                    let table = $('<table/>');
+
+                //테이블 헤더 생성 : 보류
+                    //리터럴 값 구성하지 않는 방법
+                    let trTag = $('<tr/>');
+                    // let header = data[0]; - for~in
+                    let header = ["emplyee_id",
+                                        "first_name",
+                                        "last_name",
+                                        "email",
+                                        "phone_number",
+                                        "hire_date",
+                                        "job_id",
+                                        "salary",
+                                        "commission_pct",
+                                        "manager_id",
+                                        "department_id"
+                                    ];
+                    //for in (객체 header - 배열일 때 사용. 필드명 대신에 정수값 인덱스를 사용) - data
+                    for(let field of header){
+                        let th = $('<th/>').text(field);
+                        $(trTag).append(th);
+                    }
+                    $(table).append(trTag);
+
+                //테이블 각 행 구성 -> 행 =()
+                    $(data).each(function(idx, obj){
+                        //행 구성
+                        let tr = $('<tr/>'); 
+
+                            //행 안의 td들을 구성 : for ~ in
+                            for(let field of header){
+                                let td = $('<td/>').text(obj[field]);
+                                //문제 - 방법1) , 모든행이 동일해서 id안줌 class로
+                                if(field == "last_name"){
+                                    $(td).prop('class', 'name');
+                                }
+                                $(tr).append(td);
+                            }
+                        $(table).append(tr);
+                    });
+
+                //div 태그에 테이블 append()
+                    $('#content').append(table);
+                
+                // 이벤트 - DOM에 정확하게 대상을 등록하고 걸어주기
+                // 지정해서 이벤트 걸어주는이유?  기능이 많아지다 보면 겹칠수 있어서 . 하나씩 지정해주기
+                // 문제) 행 클릭하면 이름 콘솔에 보여주기 
+                $('#content > table td').click(function(){
+                    //현재동작하는 객체 가져옴
+                    let currnetTag = this; 
+                    
+                    // 1)
+                    // let trTag = $(currnetTag).parent().children();
+                    let nameTag = $(currnetTag).parent().find('td.name');
+                    console.log(nameTag.text());
+
+                    // 2) - 헤더에 lastname의 인덱스값을 가져와서 몇번째 td인지 
+                    //현재 선택한거 기반 선택 (.parents().closest() 관계없어서 쓰기 어려움)
+                    let headerTag = $(currnetTag).parents().siblings('tr:has(th)'); //header 도착
+                    let index = headerTag.children().index($('th:contains("last_name")')); //header로 index찾기
+                    let name = $(currnetTag).parent().children().eq(index).text(); //siblings으로 잘려나가서 올라간다음 찾아와서 내림
+                    console.log('index find :' , name);
+                })
+                },
+            error : function(reject){
+                console.log(reject);
+            }
+        });
+            
+        // alert("안뇽안뇽~");
+    </script>
+    </body>
+</html>

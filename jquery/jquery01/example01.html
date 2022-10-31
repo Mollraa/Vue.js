@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>example 01</title>
+    <!-- jquery사용시 꼭 써주쟈 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <form id="info">
+        <div>
+            <label for="user_name">이름</label>
+            <input type="text" name="user_name" id="user_name">
+        </div>
+        <div>
+            <label for="user_dept">소속</label>
+            <select name="user_dept" id="user_dept">
+                <option value="student">학생</option>
+                <option value="teacher">교수</option>
+            </select>
+        </div>
+        <div>
+            <label for="user_hobby">취미</label>
+            <input type="checkbox" name="user_hobby" value="독서">독서
+            <input type="checkbox" name="user_hobby" value="영화">영화
+            <input type="checkbox" name="user_hobby" value="글쓰기">글쓰기
+        </div>
+        <button type="button" name="input" id="input">등록</button>
+    </form>
+    <div id="show">
+        <table style="border: 1px solid pink;">
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>소속</th>
+                    <th>취미1</th>
+                    <th>취미2</th>
+                    <th>취미3</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('input').addEventListener('click', jqEvnet2);
+
+    })
+
+    function jsEvent() {
+        //입력 폼의 정보를 검색
+        let name = document.getElementById('user_name').value; //유저이름
+        let select = document.getElementById('user_dept'); //select박스 정보
+        let dept = select.options[select.selectedIndex].textContent;
+        let hobbies = document.querySelectorAll('input[name="user_hobby"]:checked'); //취미
+
+        //정보를 기반으로 한 행 생성
+        let tr = document.createElement('tr');
+
+        //1)이름
+        let td = document.createElement('td');
+        td.textContent = name;
+        tr.appendChild(td);
+
+        //2)소속
+        td = document.createElement('td');
+        td.textContent = dept;
+        tr.appendChild(td);
+
+        //3)취미
+        for (let i = 0; i < 3; i++) { // index : 0, 1, 2
+            td = document.createElement('td');
+            if (i < hobbies.length) { //hobbies.length가 2이면 가질수 있는 index : 0, 1
+                td.textContent = hobbies[i].value;
+            }
+            tr.appendChild(td);
+        }
+
+        //행을 테이블에 등록
+        document.getElementsByTagName('tbody')[0].appendChild(tr);
+    }
+
+    function jqEvnet() {
+        //입력 폼의 정보를 검색
+        //let name = document.getElementById('user_name').value; //유저이름
+        let name = $('#user_name').val();
+
+        //let select = document.getElementById('user_dept'); //select박스 정보
+        //let dept = select.options[select.selectedIndex].textContent;
+        let dept = $('#user_dept :selected').text();
+
+        //let hobbies = document.querySelectorAll('input[name="user_hobby"]:checked'); //취미
+        let hobbies = $('#info > div:last :checked');
+
+
+        //정보를 기반으로 한 행 생성
+        let tr = document.createElement('tr');
+
+        //1)이름
+        let td = document.createElement('td');
+        td.textContent = name;
+        tr.appendChild(td);
+
+        //2)소속
+        td = document.createElement('td');
+        td.textContent = dept;
+        tr.appendChild(td);
+
+        //3)취미
+        for (let i = 0; i < 3; i++) { // index : 0, 1, 2
+            td = document.createElement('td');
+            if (i < hobbies.length) { //hobbies.length가 2이면 가질수 있는 index : 0, 1
+                td.textContent = hobbies[i].value;
+            }
+            tr.appendChild(td);
+        }
+
+        //행을 테이블에 등록
+        document.getElementsByTagName('tbody')[0].appendChild(tr);
+
+    }
+
+    function jsEvent() {
+        //입력 폼의 정보를 검색
+        let name = document.getElementById('user_name').value; //유저이름
+        let select = document.getElementById('user_dept'); //select박스 정보
+        let dept = select.options[select.selectedIndex].textContent;
+        let hobbies = document.querySelectorAll('input[name="user_hobby"]:checked'); //취미
+
+        //정보를 기반으로 한 행 생성
+        let tr = document.createElement('tr');
+
+        //1)이름
+        let td = document.createElement('td');
+        td.textContent = name;
+        tr.appendChild(td);
+
+        //2)소속
+        td = document.createElement('td');
+        td.textContent = dept;
+        tr.appendChild(td);
+
+        //3)취미
+        for (let i = 0; i < 3; i++) { // index : 0, 1, 2
+            td = document.createElement('td');
+            if (i < hobbies.length) { //hobbies.length가 2이면 가질수 있는 index : 0, 1
+                td.textContent = hobbies[i].value;
+            }
+            tr.appendChild(td);
+        }
+
+        //행을 테이블에 등록
+        document.getElementsByTagName('tbody')[0].appendChild(tr);
+    }
+
+    function jqEvnet2() {
+        //입력 폼의 정보를 검색
+        //이름
+        let name = $('#user_name').val();
+
+        //소속
+        let dept = $('#user_dept :selected').text();
+
+        //let hobbies = document.querySelectorAll('input[name="user_hobby"]:checked'); //취미
+        let hobbies = $('#info > div:last :checked');
+
+
+        //정보를 기반으로 한 행 생성
+        let tr = $('<tr/>'); //-> Element Node
+
+        //1)이름
+        $(tr).append($('<td/>').text(name));
+            // -> $('<td/>') = append에 넘겨주는 매개변수
+
+        //2)소속
+        $(tr).append($('<td/>').text(dept));
+
+        //3)취미
+        //node라서 프로퍼티로 접근하거나 or jquery로 감싸서 매서드호출하는 방법 둘 다 가능
+        for (let i = 0; i < 3; i++) { // index : 0, 1, 2
+            let td = $('<td/>');
+            if (i < hobbies.length) { // hobbies.length가 2이면 가질수 있는 index : 0, 1
+                //td.textContent = hobbies[i].value; = $(td).text(hobbies[i].value);
+                $(td).text(hobbies[i].value);
+            }
+            $(tr).append(td);
+            //$(tr).appendChild(td); ->자스는 자스영역에, 혼용해서 쓰지말자
+
+        }
+
+        //행을 테이블에 등록
+        $('tbody:first').append(tr);
+
+    }
+</script>
+
+</html>

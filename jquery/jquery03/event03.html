@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+</head>
+<body>
+    <!-- 클릭 이벤트를 걸어서 내가 선택한 이벤트가 뭔지 밑에 출력되게 만들기 -->
+    <h2>Test</h2>
+    <ul class="test">
+        <li><a href="#" class="btn1">선택1</a></li>
+        <li><a href="#" class="btn2">선택2</a></li>
+        <li><a href="#" class="btn3">선택3</a></li>
+    </ul>
+    <p class="idxNum"></p>
+
+    <script>
+        // function btnClick(){
+        //     $('.btn').text('<p> 선택1을 클릭 했군! </p>');
+        //     return false;
+        // };
+
+        // $('.btn3').on('click', function(){
+        //             $('.btn3 p').text('<p>3번을 클릭 하셨군뇨~?</p>');
+        //         });
+        
+
+        //교수님 풀이 (오작동시 캐시 지워보기)
+        //열개 지만 한명이 안녕하면서 대답하면 그게 누군지 알수있다.
+            //event 객체 -> this를 몰라도 사용가능
+                $('.test a').on('click', function(event){
+                    //currentTarget = node기능이라서 -> textContent로 불러올 수 있음
+                    let tagInfo = event.currentTarget; 
+                    // $('p.idxNum').text(tagInfo.textContent);  //or
+                    $('p.idxNum').text($(tagInfo).text());
+                });
+            
+            //this -> event를 더 간결하게 사용하기 위해
+            $('.test a').click(function(){
+                //this = event.currentTarget / 동작시키는 주체를 가리킴
+                console.log('this : ',this);
+                $('p.idxNum').text('this' + this.textContent);
+                //this jquery
+                $('p.idxNum').text('this' + $(this).text());
+
+            })
+    </script>
+</body>
+</html>
